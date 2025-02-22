@@ -56,3 +56,6 @@ CREATE TABLE Mensajes (
     FOREIGN KEY (id_emisor) REFERENCES Usuarios(id_usuario) ON DELETE CASCADE,
     FOREIGN KEY (id_receptor) REFERENCES Usuarios(id_usuario) ON DELETE CASCADE
 );
+INSERT INTO Usuarios (nombre_usuario, nombre_completo, correo, contrasena, cuenta_publica) 
+VALUES ('Pablet', 'Pablo let', 'pablo@example.com', '1234', TRUE)
+ALTER TABLE Usuarios MODIFY cuenta_publica TINYINT(1) NOT NULL DEFAULT 0;
