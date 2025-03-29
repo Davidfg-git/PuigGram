@@ -59,3 +59,5 @@ CREATE TABLE Mensajes (
 INSERT INTO Usuarios (nombre_usuario, nombre_completo, correo, contrasena, cuenta_publica) 
 VALUES ('Pablet', 'Pablo let', 'pablo@example.com', '1234', TRUE)
 ALTER TABLE Usuarios MODIFY cuenta_publica TINYINT(1) NOT NULL DEFAULT 0;
+
+ALTER DATABASE puiggram CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

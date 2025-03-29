@@ -7,7 +7,7 @@ if (isset($_SESSION['user_id'])) {
     exit;
 }
 
-include 'db.php';  // Incluir el archivo de conexión a la base de datos
+include '../db/db.php';  // Incluir el archivo de conexión a la base de datos
 
 // Verificar si se ha enviado el formulario
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -44,7 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1, minimum-scale=1">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/public/assets/styles/styles.css">
+    <link rel="stylesheet" href="../../public/assets/styles/styles.css">
+    
 </head>
 <body class="bg-light">
    
@@ -54,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     <main class="layout-container">
         <div class="phone-container">
-            <img src="img/imagenIndex.png" alt="Imagen del móvil" class="phone-image">
+            <img src="../../public/assets/images/imagenIndex.png" alt="Imagen del móvil" class="phone-image">
         </div>
 
         <!-- Formulario de Login -->

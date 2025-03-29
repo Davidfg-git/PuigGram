@@ -21,25 +21,20 @@ class Usuarios {
         return $result->fetch_assoc();
     }
 
-    public function createUsuario($nombre, $email, $password) {
-        $query = "INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param("sss", $nombre, $email, $password);
-        return $stmt->execute();
+    public function getDb() {
+        return $this->db;
     }
 
-    public function updateUsuario($id, $nombre, $email, $password) {
-        $query = "UPDATE usuarios SET nombre = ?, email = ?, password = ? WHERE id = ?";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param("sssi", $nombre, $email, $password, $id);
-        return $stmt->execute();
+    public function setDb($db) {
+        $this->db = $db;
     }
-
-    public function deleteUsuario($id) {
-        $query = "DELETE FROM usuarios WHERE id = ?";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param("i", $id);
-        return $stmt->execute();
+    public function __toString() {
+        $usuarios = $this->getAllUsuarios();
+        $output = "";
+        foreach ($usuarios as $usuario) {
+            $output .= implode(", ", $usuario) . "\n";
+        }
+        return $output;
     }
 }
 ?>

@@ -1,8 +1,8 @@
 <?php
 session_start();  // Iniciar sesión
-    //$id = $_SESSION['user_id'];
-    $id = 2; // Temporal
-    include '/backend/db/db.php';  // Incluir archivo de conexión a la base de datos
+    $id = $_SESSION['user_id'];
+    //$id = 2; // Temporal
+    include '../../backend/db/db.php';  // Incluir archivo de conexión a la base de datos
     //seleccionar datos de la base de datos
     $sql = "SELECT * FROM Usuarios WHERE id_usuario = :id";
     $stmt = $pdo->prepare($sql);
@@ -24,7 +24,7 @@ session_start();  // Iniciar sesión
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio</title>
-    <link rel="stylesheet" href="/public/assets/styles/mainStyle.css">
+    <link rel="stylesheet" href="../../public/assets/styles/mainStyle.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
     
@@ -68,17 +68,17 @@ session_start();  // Iniciar sesión
 
         <section  class="seccionesPerfil">
             <label for=""  class="formularioCambioPerfil">Nombre </label> 
-            <input type="text" class="nombre" placeholder=<?php echo $nombre; ?> id="nombre" >
+            <input type="text" class="nombre" value=<?php echo $nombre; ?> id="nombre" >
         </section>
         
         <section  class="seccionesPerfil">
             <label for=""  class="formularioCambioPerfil" >Nombre de usuario</label> 
-            <input type="text" class="nombre" id="userName" placeholder=<?php echo $username; ?> >
+            <input type="text" class="nombre" id="userName" value=<?php echo $username; ?> >
         </section>
 
         <section  class="seccionesPerfil">
             <label for=""  class="formularioCambioPerfil">Presentación </label>
-            <input type="text" class="nombre"  id="presentacion" placeholder=<?php echo $descripcion; ?>> 
+            <input type="text" class="nombre"  id="presentacion" max=300 value="<?php echo $descripcion; ?>"> 
         </section>
     
         <section  class="seccionesPerfil">
