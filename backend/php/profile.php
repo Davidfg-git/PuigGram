@@ -2,7 +2,7 @@
 session_start();  // Iniciar sesión
     //$id = $_SESSION['user_id'];
     $id = 2; // Temporal
-    include 'db.php';  // Incluir archivo de conexión a la base de datos
+    include '/backend/db/db.php';  // Incluir archivo de conexión a la base de datos
     //seleccionar datos de la base de datos
     $sql = "SELECT * FROM Usuarios WHERE id_usuario = :id";
     $stmt = $pdo->prepare($sql);
@@ -24,7 +24,7 @@ session_start();  // Iniciar sesión
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio</title>
-    <link rel="stylesheet" href="mainStyle.css">
+    <link rel="stylesheet" href="/public/assets/styles/mainStyle.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
     

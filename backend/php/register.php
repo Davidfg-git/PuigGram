@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- Custom CSS -->
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="registerstyles.css">
+    <link rel="stylesheet" href="/public/assets/styles/registerStyle.css">
     
 </head>
 <body class="bg-light">
