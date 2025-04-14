@@ -38,8 +38,8 @@ session_start();  // Iniciar sesión
             <li><a href="messages.html"><i class="bi bi-chat"></i>Mensajes</a></li>
             <li><a href="notifications.html"><i class="bi bi-bell"></i>Notificaciones</a></li>
             <li><a href="publish.html"><i class="bi bi-plus-square"></i>Publicar</a></li>
-            <li><a href="profile.html">Perfil</a></li>
-            <li><a href="settings.html">Configuración</a></li>
+            <li><a href="profile.php"><i class="bi bi-person"></i>Perfil</a></li>
+            <li><a href="settings.html"><i class="bi bi-gear"></i>Configuración</a></li>
         </ul>
     </div>
 
@@ -51,34 +51,45 @@ session_start();  // Iniciar sesión
         </div>
     </div>
     <div class="contenido" style="justify-content: center;">
-        <form action="" class="formularioConfiguracion">
+    <form action="changeProfile.php" method="POST" enctype="multipart/form-data" class="formularioConfiguracion">
             <section class="seccionesPerfil">
             <label for="file" class="formularioCambioPerfil">Imagen de perfil </label> 
             
                 <img class="imgPerfilPrev" src="./img/imgPerfil.webp" alt="Profile Picture">
             
             
-            <input type="file" id="fileInput" style="display: none;"  accept="image/*" onchange="mostrarNombreArchivo()">
+            <input type="file" id="fileInput" style="display: none;"  name="imagen_perfil"  accept="image/*" onchange="mostrarNombreArchivo()">
             <!-- Botón que simula el input file -->
             <button class="editarImagen" type="button" onclick="document.getElementById('fileInput').click();">
               Editar imagen
             </button>
+            <p id="fileNameDisplay" style="display: inline; margin-top: 10px; font-size: 10px; font-style: italic;"></p>
+            <script>
+                function mostrarNombreArchivo() {
+                    const fileInput = document.getElementById('fileInput');
+                    const fileNameDisplay = document.getElementById('fileNameDisplay');
+                    if (fileInput.files.length > 0) {
+                        fileNameDisplay.textContent = `Imagen seleccionada: ${fileInput.files[0].name}`;
+                   
+                    }
+                }
+            </script>
         
         </section>
 
         <section  class="seccionesPerfil">
             <label for=""  class="formularioCambioPerfil">Nombre </label> 
-            <input type="text" class="nombre" value=<?php echo $nombre; ?> id="nombre" >
+            <input type="text" class="nombre" value=<?php echo $nombre; ?> id="nombre" name="nombre">
         </section>
         
         <section  class="seccionesPerfil">
             <label for=""  class="formularioCambioPerfil" >Nombre de usuario</label> 
-            <input type="text" class="nombre" id="userName" value=<?php echo $username; ?> >
+            <input type="text" class="nombre" id="userName"  name="userName" value=<?php echo $username; ?> >
         </section>
 
         <section  class="seccionesPerfil">
             <label for=""  class="formularioCambioPerfil">Presentación </label>
-            <input type="text" class="nombre"  id="presentacion" max=300 value="<?php echo $descripcion; ?>"> 
+            <input type="text" class="nombre"  id="presentacion" name="presentacion" max=300 value="<?php echo $descripcion; ?>"> 
         </section>
     
         <section  class="seccionesPerfil">

@@ -7,10 +7,11 @@ $password = 'Davidfg04.';  // La contraseña de MySQL
 
 try {
     // Establecer la conexión a la base de datos con PDO
-    $pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbname", $username, $password);
+    $pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);  // Configurar PDO para manejar errores
 } catch (PDOException $e) {
     // Si hay error en la conexión, mostrarlo
     die("Conexión fallida: " . $e->getMessage());
 }
 ?>
+    

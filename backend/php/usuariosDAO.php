@@ -2,13 +2,26 @@
 class UsuariosDAO{
     private $db;
 
-public function createUsuario($nombre, $email, $password) {
+
+    
+
+    public function __construct($db) {
+        $this->db = $db; // Asignar la conexión a la base de datos
+    }
+
+    public function createUsuario($nombre, $email, $password) {
         $query = "INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param("sss", $nombre, $email, $password);
         return $stmt->execute();
     }
 
+    public function updatePerfilUsuario($id, $imagenPerfil, $nombre, $nombreUsuario, $presentacion) {
+        $query = "UPDATE usuarios SET imagen_perfil = ?, nombre_completo = ?, nombre_usuario = ?, presentacion = ? WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param("ssssi", $imagenPerfil, $nombre, $nombreUsuario, $presentacion, $id);
+        return $stmt->execute();
+    }
     public function updateUsuario($id, $nombre, $email, $password) {
         $query = "UPDATE usuarios SET nombre = ?, email = ?, password = ? WHERE id = ?";
         $stmt = $this->db->prepare($query);
@@ -44,6 +57,7 @@ public function createUsuario($nombre, $email, $password) {
         return $stmt->execute();
     }
 
+    
     
 }
 

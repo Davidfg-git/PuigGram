@@ -1,4 +1,7 @@
 /* Estilos base (ya existentes) */
+ul li a {
+   padding-left: 100px;
+}
 body {
     font-family: Arial, sans-serif;
     margin: 0px;
