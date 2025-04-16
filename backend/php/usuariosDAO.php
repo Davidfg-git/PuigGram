@@ -16,12 +16,41 @@ class UsuariosDAO{
         return $stmt->execute();
     }
 
+    // actualizar perfil
     public function updatePerfilUsuario($id, $imagenPerfil, $nombre, $nombreUsuario, $presentacion) {
-        $query = "UPDATE usuarios SET imagen_perfil = ?, nombre_completo = ?, nombre_usuario = ?, presentacion = ? WHERE id = ?";
+        if ($imagenPerfil === null){
+            $query = "UPDATE usuarios 
+                  SET  nombre_completo = :nombre, 
+                      nombre_usuario = :nombreUsuario,
+                      descripcion = :presentacion 
+                  WHERE id_usuario = :id";
+    
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param("ssssi", $imagenPerfil, $nombre, $nombreUsuario, $presentacion, $id);
-        return $stmt->execute();
+        return $stmt->execute([
+            ':nombre' => $nombre,
+            ':nombreUsuario' => $nombreUsuario,
+            ':presentacion' => $presentacion,
+            ':id' => $id
+        ]);
+        } else {
+        $query = "UPDATE usuarios 
+                  SET imagen_perfil = :imagenPerfil,  
+                      nombre_completo = :nombre, 
+                      nombre_usuario = :nombreUsuario,
+                      descripcion = :presentacion 
+                  WHERE id_usuario = :id";
+    
+        $stmt = $this->db->prepare($query);
+        return $stmt->execute([
+            ':imagenPerfil' => $imagenPerfil,
+            ':nombre' => $nombre,
+            ':nombreUsuario' => $nombreUsuario,
+            ':presentacion' => $presentacion,
+            ':id' => $id
+        ]);
     }
+}
+    
     public function updateUsuario($id, $nombre, $email, $password) {
         $query = "UPDATE usuarios SET nombre = ?, email = ?, password = ? WHERE id = ?";
         $stmt = $this->db->prepare($query);

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redimensionador de Imágenes Moderno</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            width: 420px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .image-box {
+            width: 100%;
+            height: 300px;
+            border: 2px solid #ddd;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            cursor: grab;
+        }
+
+        .image-box img {
+            max-width: none;
+            max-height: none;
+            position: absolute;
+            pointer-events: none;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .image-box .resizer {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 25px;
+            height: 25px;
+            background-color: rgba(0, 0, 0, 0.5);
+            cursor: se-resize;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .image-box .resizer:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .custom-file-upload {
+            padding: 10px 20px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .custom-file-upload:hover {
+            background-color: #0b7dda;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Redimensionador de Imagen</h2>
+        <div class="image-box" id="imageBox">
+            <p id="placeholder" style="color: #888;">Selecciona una imagen</p>
+            <img id="preview" style="display: none;">
+            <div class="resizer" id="resizer"></div>
+        </div>
+
+        <div class="controls">
+            <label for="fileInput" class="custom-file-upload">Seleccionar Imagen</label>
+            <input type="file" id="fileInput" accept="image/*">
+            <button id="cropBtn" disabled>Recortar Imagen</button>
+            <button id="resetBtn" disabled>Reiniciar</button>
+        </div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+        const placeholder = document.getElementById('placeholder');
+        const cropBtn = document.getElementById('cropBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const imageBox = document.getElementById('imageBox');
+        const resizer = document.getElementById('resizer');
+
+        let originalImage = null;
+        let isDragging = false;
+        let isResizing = false;
+        let startX, startY, startWidth, startHeight, imageBoxRect;
+
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    preview.src = event.target.result;
+                    preview.style.display = 'block';
+                    placeholder.style.display = 'none';
+                    cropBtn.disabled = false;
+                    resetBtn.disabled = false;
+
+                    originalImage = new Image();
+                    originalImage.src = event.target.result;
+                    originalImage.onload = function() {
+                        centerImage();
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function centerImage() {
+            const imgWidth = preview.naturalWidth;
+            const imgHeight = preview.naturalHeight;
+            const containerWidth = imageBox.offsetWidth;
+            const containerHeight = imageBox.offsetHeight;
+
+            let translateX = 0;
+            let translateY = 0;
+
+            if (imgWidth < containerWidth && imgHeight < containerHeight) {
+                translateX = (containerWidth - imgWidth) / 2;
+                translateY = (containerHeight - imgHeight) / 2;
+            } else {
+                preview.style.transform = `translate(0, 0)`;
+            }
+            updateImagePosition(translateX, translateY);
+        }
+
+        function updateImagePosition(x, y) {
+            preview.style.transform = `translate(${x}px, ${y}px)`;
+        }
+
+        imageBox.addEventListener('mousedown', function(e) {
+            if (e.target === resizer) return;
+
+            if (!preview.src) return;
+
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            imageBox.style.cursor = 'grabbing';
+            imageBoxRect = imageBox.getBoundingClientRect();
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            if (!isDragging || !preview.src) return;
+
+            e.preventDefault();
+
+            const deltaX = e.clientX - startX;
+            const deltaY = e.clientY - startY;
+            const maxTranslateX = imageBox.offsetWidth - preview.width;
+            const maxTranslateY = imageBox.offsetHeight - preview.height;
+
+            let translateX = Math.min(Math.max(deltaX, maxTranslateX), 0);
+            let translateY = Math.min(Math.max(deltaY, maxTranslateY), 0);
+
+            updateImagePosition(translateX, translateY);
+        });
+
+        document.addEventListener('mouseup', function() {
+            if (!isDragging) return;
+
+            isDragging = false;
+            imageBox.style.cursor = 'grab';
+        });
+
+        resizer.addEventListener('mousedown', function(e) {
+            e.preventDefault();
+            isResizing = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            startWidth = preview.width;
+            startHeight = preview.height;
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            if (!isResizing) return;
+
+            e.preventDefault();
+
+            const newWidth = startWidth + (e.clientX - startX);
+            const newHeight = startHeight + (e.clientY - startY);
+
+            preview.style.width = `${Math.max(newWidth, 100)}px`;
+            preview.style.height = `${Math.max(newHeight, 100)}px`;
+        });
+
+        document.addEventListener('mouseup', function() {
+            if (!isResizing) return;
+
+            isResizing = false;
+        });
+
+        cropBtn.addEventListener('click', function() {
+            const canvas = document.createElement('canvas');
+            canvas.width = imageBox.offsetWidth;
+            canvas.height = imageBox.offsetHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(preview, 0, 0, canvas.width, canvas.height);
+            preview.src = canvas.toDataURL();
+            imageBox.style.cursor = 'default';
+        });
+
+        resetBtn.addEventListener('click', function() {
+            preview.src = originalImage.src;
+            preview.onload = function() {
+                centerImage();
+                cropBtn.disabled = false;
+                imageBox.style.cursor = 'grab';
+            };
+        });
+    </script>
+</body>
+</html>
