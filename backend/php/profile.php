@@ -17,21 +17,29 @@ session_start();  // Iniciar sesión
     $imagen = $user['imagen_perfil'];   
     
     $imagenCodificada = base64_encode($imagen); // $imagen es el BLOB binario
-    $src = "data:image/png;base64," . $imagenCodificada;
+    $tempPath = "../public/temp/{$id}.png";
+    if (file_exists($tempPath)) {
+        $src = $tempPath . '?t=' . time();
+    }
+    else {
+        $src = "data:image/png;base64," . $imagenCodificada; // Codificar la imagen de perfil en base64 para mostrarla en la vista previa
+    }    
     $sugerencias = []; // Inicializar el array de sugerencias
     // SELECCION ALEATORIA DE PERFILES
-    for ($i = 0; $i < 1; $i++) {
-        
-        // Inicializar el array de sugerencias
-   
-        $sql = "SELECT * FROM Usuarios WHERE id_usuario != :id ORDER BY RAND() LIMIT 1"; // Seleccionar un usuario aleatorio que no sea el actual
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute(['id' => $id]);
-    $newUser = $stmt->fetch(PDO::FETCH_ASSOC); // Obtener un único usuario como un array asociativo
-    $sugerencias[$i] = $newUser; // Guardar el usuario en el array de sugerencias
-
+    $usedIds = []; // Array para almacenar los IDs ya seleccionados
     
+    for ($i = 0; $i <= 3; $i++) {
+        do {
+            $sql = "SELECT * FROM Usuarios WHERE id_usuario != :id AND id_usuario NOT IN (" . implode(',', $usedIds ?: [0]) . ") ORDER BY RAND() LIMIT 1";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(['id' => $id]);
+            $newUser = $stmt->fetch(PDO::FETCH_ASSOC); // Obtener un único usuario como un array asociativo
+        } while (!$newUser); // Repetir si no se encuentra un usuario válido
+
+        $sugerencias[$i] = $newUser; // Guardar el usuario en el array de sugerencias
+        $usedIds[] = $newUser['id_usuario']; // Agregar el ID del usuario seleccionado al array de IDs usados
     }
+    
     // Codificar la imagen de perfil en base64 para mostrarla en la vista previa
     foreach ($sugerencias as &$sugerencia) {
         if (!empty($sugerencia['imagen_perfil'])) {
@@ -90,6 +98,10 @@ session_start();  // Iniciar sesión
                 Editar imagen
             </button>
             
+            <button class="redimensionarImagen" type="button" onclick="window.location.href='../../redimensionador/redimensionador.php'">
+                Redimensionar imagen
+            </button>
+    
             <p id="fileNameDisplay" style="display: inline; margin-top: 10px; font-size: 10px; font-style: italic;"></p>
             <script>
                 function mostrarNombreArchivo() {
@@ -138,25 +150,25 @@ session_start();  // Iniciar sesión
            </form>
     </div>
     <div class="suggestions">
-        <h2>Sugerencias</h2>
-        <ul>
-            <li>
-            <img src="<?=  $sugerencias[0][$src] ?>"  alt="Profile Picture">
-            <span><?= $sugerencias[0]['nombre_usuario'] ?></span>
-                <button>Seguir</button>
-            </li>
-            <li>
-                <img src="<?=  $sugerencias[1][$src] ?>  " alt="Profile Picture">
-                <span><?= $sugerencias[1]['nombre_usuario'] ?></span>
-                <button>Seguir</button>
-            </li>
-            <li>
-                <img src="<?= $sugerencias[2][$src] ?> " alt="Profile Picture">
-                <span><?= $sugerencias[2]['nombre_usuario'] ?></span>
-                <button>Seguir</button>
-            </li>
-        </ul>
-    </div>
+    <h2>Sugerencias</h2>
+    <ul>
+        <li>
+        <img src="<?= !empty($sugerencias[0]['src']) ? $sugerencias[0]['src'] : '../../public/assets/default/default-image.jpg' ?>" alt="Profile Picture">
+        <span><?= htmlspecialchars($sugerencias[0]['nombre_usuario']) ?></span>
+            <button>Seguir</button>
+        </li>
+        <li>
+        <img src="<?= !empty($sugerencias[1]['src']) ? $sugerencias[1]['src'] : '../../public/assets/default/default-image.jpg' ?>" alt="Profile Picture">
+            <span><?= htmlspecialchars($sugerencias[1]['nombre_usuario']) ?></span>
+            <button>Seguir</button>
+        </li>
+        <li>
+        <img src="<?= !empty($sugerencias[2]['src']) ? $sugerencias[2]['src'] : '../../public/assets/default/default-image.jpg' ?>" alt="Profile Picture">
+            <span><?= htmlspecialchars($sugerencias[2]['nombre_usuario']) ?></span>
+            <button>Seguir</button>
+        </li>
+    </ul>
+</div>
     
 </body>
 </html>
@@ -164,6 +176,6 @@ session_start();  // Iniciar sesión
             <!-- 
                 CORREGIR FOTOS DE SUGERENCIAS
                 EDITOR DE REDIMENSIONAR IMAGENES
-
+                SE VE MAL EN NAVEGACIÓN PRIVADA
 
             -->
