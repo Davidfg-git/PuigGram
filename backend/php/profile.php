@@ -16,14 +16,12 @@ session_start();  // Iniciar sesión
     $descripcion = $user['descripcion'];
     $imagen = $user['imagen_perfil'];   
     
-    $imagenCodificada = base64_encode($imagen); // $imagen es el BLOB binario
-    $tempPath = "../public/temp/{$id}.png";
-    if (file_exists($tempPath)) {
-        $src = $tempPath . '?t=' . time();
+    if (isset($_SESSION['imagen_redimensionada'])) {
+        $src = $_SESSION['imagen_redimensionada']; // Imagen redimensionada ya en base64
+    } else {
+        $imagenCodificada = base64_encode($imagen);
+        $src = "data:image/png;base64," . $imagenCodificada;
     }
-    else {
-        $src = "data:image/png;base64," . $imagenCodificada; // Codificar la imagen de perfil en base64 para mostrarla en la vista previa
-    }    
     $sugerencias = []; // Inicializar el array de sugerencias
     // SELECCION ALEATORIA DE PERFILES
     $usedIds = []; // Array para almacenar los IDs ya seleccionados
@@ -98,9 +96,10 @@ session_start();  // Iniciar sesión
                 Editar imagen
             </button>
             
-            <button class="redimensionarImagen" type="button" onclick="window.location.href='../../redimensionador/redimensionador.php'">
-                Redimensionar imagen
-            </button>
+            <!-- Cambiar el botón de redimensionar por este: -->
+            <button class="redimensionarImagen" type="button" onclick="prepareRedimensionar()">
+    Redimensionar imagen
+</button>
     
             <p id="fileNameDisplay" style="display: inline; margin-top: 10px; font-size: 10px; font-style: italic;"></p>
             <script>
@@ -169,7 +168,30 @@ session_start();  // Iniciar sesión
         </li>
     </ul>
 </div>
+<script>
+function prepareRedimensionar() {
+    const imagenSrc = document.getElementById('perfilImagen').src;
     
+    if(imagenSrc.includes('data:image')) {
+        // Para imágenes base64, usar POST
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '../../redimensionador/redimensionador.php';
+        
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'imagen';
+        input.value = imagenSrc;
+        
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+    } else {
+        // Para rutas de archivo, usar GET
+        window.location.href = `../../redimensionador/redimensionador.php?imagen=${encodeURIComponent(imagenSrc)}`;
+    }
+}
+</script>
 </body>
 </html>
 

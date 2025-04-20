@@ -42,7 +42,7 @@ body {
 .sidebar ul li a {
     text-decoration: none;
     color: #333;
-    display: flex;
+    display: contents !important;
     align-items: center;
 }
 
