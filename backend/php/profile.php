@@ -1,51 +1,28 @@
 <?php
-session_start();  // Iniciar sesión
 
-    $id = $_SESSION['user_id'];
-    
-    //$id = 2; // Temporal
-    include '../../backend/db/db.php';  // Incluir archivo de conexión a la base de datos
-    //seleccionar datos de la base de datos
-    $sql = "SELECT * FROM Usuarios WHERE id_usuario = :id";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute(['id' => $id]);  
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    // utilizar los datos seleccionados para mostrarlos en el placeholder del formulario
-    $nombre = $user['nombre_completo']; 
-    $username = $user['nombre_usuario'];
-    $descripcion = $user['descripcion'];
-    $imagen = $user['imagen_perfil'];   
-    
-    if (isset($_SESSION['imagen_redimensionada'])) {
-        $src = $_SESSION['imagen_redimensionada']; // Imagen redimensionada ya en base64
-    } else {
-        $imagenCodificada = base64_encode($imagen);
-        $src = "data:image/png;base64," . $imagenCodificada;
-    }
-    $sugerencias = []; // Inicializar el array de sugerencias
-    // SELECCION ALEATORIA DE PERFILES
-    $usedIds = []; // Array para almacenar los IDs ya seleccionados
-    
-    for ($i = 0; $i <= 3; $i++) {
-        do {
-            $sql = "SELECT * FROM Usuarios WHERE id_usuario != :id AND id_usuario NOT IN (" . implode(',', $usedIds ?: [0]) . ") ORDER BY RAND() LIMIT 1";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute(['id' => $id]);
-            $newUser = $stmt->fetch(PDO::FETCH_ASSOC); // Obtener un único usuario como un array asociativo
-        } while (!$newUser); // Repetir si no se encuentra un usuario válido
+  session_start();  // Iniciar sesión
 
-        $sugerencias[$i] = $newUser; // Guardar el usuario en el array de sugerencias
-        $usedIds[] = $newUser['id_usuario']; // Agregar el ID del usuario seleccionado al array de IDs usados
-    }
-    
-    // Codificar la imagen de perfil en base64 para mostrarla en la vista previa
-    foreach ($sugerencias as &$sugerencia) {
-        if (!empty($sugerencia['imagen_perfil'])) {
-            $imagenCodificada = base64_encode($sugerencia['imagen_perfil']);
-            $sugerencia['src'] = "data:image/png;base64," . $imagenCodificada;
-        }
-    }
+  $id = $_SESSION['user_id'];
   
+  //$id = 2; // Temporal
+  include '../../backend/db/db.php';  // Incluir archivo de conexión a la base de datos
+  //seleccionar datos de la base de datos
+  $sql = "SELECT * FROM Usuarios WHERE id_usuario = :id";
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute(['id' => $id]);  
+  $user = $stmt->fetch(PDO::FETCH_ASSOC);
+  // utilizar los datos seleccionados para mostrarlos en el placeholder del formulario
+  $nombre = $user['nombre_completo']; 
+  $username = $user['nombre_usuario'];
+  $descripcion = $user['descripcion'];
+  $imagenPerfil = $user['imagen_perfil'];
+    if ((empty($imagenPerfil))) {
+        $imagenPerfil = null;
+    }
+ 
+
+    
+
 ?>
 
 <!DOCTYPE html>
@@ -87,9 +64,9 @@ session_start();  // Iniciar sesión
             <label for="file" class="formularioCambioPerfil">Imagen de perfil</label>
             
             <!-- Mostrar la imagen actual (o la imagen predeterminada si no hay ninguna) -->
-            <img class="imgPerfilPrev" id="perfilImagen" src="<?= $src ?>" alt="Profile Picture">
+            <img class="imgPerfilPrev" id="perfilImagen" src="<?= $imagenPerfil ?>" alt="Profile Picture">
             
-            <input type="file" id="fileInput" style="display: none;" name="imagen_perfil" accept="image/*" onchange="mostrarNombreArchivo(); actualizarImagen()">
+            <input type="file" id="fileInput" style="display: none;" name="imagen_perfil" accept="image/webp,image/avif,image/jpeg,image/png" onchange="mostrarNombreArchivo(); actualizarImagen()">
             
             <!-- Botón que simula el input file -->
             <button class="editarImagen" type="button" onclick="document.getElementById('fileInput').click();">
@@ -106,9 +83,7 @@ session_start();  // Iniciar sesión
                 function mostrarNombreArchivo() {
                     const fileInput = document.getElementById('fileInput');
                     const fileNameDisplay = document.getElementById('fileNameDisplay');
-                    if (fileInput.files.length > 0) {
-                        fileNameDisplay.textContent = `Imagen seleccionada: ${fileInput.files[0].name}`;
-                    }
+                    
                 }
 
                 // Función para actualizar la imagen de perfil en la vista previa
@@ -197,7 +172,6 @@ function prepareRedimensionar() {
 
             <!-- 
                 CORREGIR FOTOS DE SUGERENCIAS
-                EDITOR DE REDIMENSIONAR IMAGENES
                 SE VE MAL EN NAVEGACIÓN PRIVADA
 
             -->

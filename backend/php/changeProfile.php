@@ -2,28 +2,52 @@
 session_start();
 include '../../backend/db/db.php';
 include '../../backend/php/usuariosDAO.php';
+$id = $_SESSION['user_id'];
+if (!empty($_FILES['imagen_perfil']['tmp_name'])) {
+    
+    // Validar tamaño
+    if ($_FILES["imagen_perfil"]["size"] > 5000000) { // 5 MB
+        echo "La imagen es demasiado grande.";
+        exit;
+    }
 
+    // Obtener extensión y generar nombre único
+    $extension = pathinfo($_FILES['imagen_perfil']['name'], PATHINFO_EXTENSION);
+    $nombreArchivo = $id . '.' . $extension;
+    $rutaDestino = '../../public/assets/images/profile/' . $nombreArchivo;
+    $pattern = '../../public/assets/images/profile/' . $id . '.*';
+    $archivosExistentes = glob($pattern);
+    foreach ($archivosExistentes as $archivo) {
+        unlink($archivo);
+    }
+    // Mover el archivo a la carpeta de destino
+    if (move_uploaded_file($_FILES['imagen_perfil']['tmp_name'], $rutaDestino)) {
+        // Guardar la ruta relativa
+       
+        $imagenPerfil = 'public/images/profile/' . $nombreArchivo;
+    } else {
+        echo "Error al subir la imagen.";
+        exit;
+    }
+} else {
+    // Si no se subió una nueva imagen, conservar la actual
+    $imagenPerfil = $_SESSION['imagen_perfil'];
+}
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = $_SESSION['user_id'];
     $nombre = $_POST['nombre'];
     $nombreUsuario = $_POST['userName'];
     $presentacion = $_POST['presentacion'];
-    //$imagenPerfil = file_get_contents($_FILES['imagen_perfil']['tmp_name']);
-    if (empty(($_FILES['imagen_perfil']['tmp_name']))) {
-        $imagenPerfil = null; // Si no se subió una imagen, asignar null
-    } else {
-        $imagenPerfil = file_get_contents($_FILES['imagen_perfil']['tmp_name']);
-    }
+    $imagenPerfil = $rutaDestino;
+
+   
 
     // Crear instancia del DAO y actualizar
     $usuariosDAO = new UsuariosDAO($pdo);
-    if ($imagenPerfil === null) {
-        $imagenPerfil = $_SESSION['imagen_perfil']; // Mantener la imagen actual si no se subió una nueva
-    
-    }
     $resultado = $usuariosDAO->updatePerfilUsuario($id, $imagenPerfil, $nombre, $nombreUsuario, $presentacion);
 
     if ($resultado) {
+        // También puedes actualizar la variable de sesión si la usas en otros lados
+        $_SESSION['imagen_perfil'] = $imagenPerfil;
         header("Location: profile.php?success=1");
         exit;
     } else {
