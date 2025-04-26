@@ -59,6 +59,7 @@
         </div>
     </div>
     <div class="contenido" style="justify-content: center;">
+
     <form action="changeProfile.php" method="POST" enctype="multipart/form-data" class="formularioConfiguracion">
         <section class="seccionesPerfil">
             <label for="file" class="formularioCambioPerfil">Imagen de perfil</label>
@@ -98,7 +99,10 @@
                             perfilImagen.src = e.target.result;  // Cambia el src de la imagen
                         };
                         reader.readAsDataURL(fileInput.files[0]);  // Lee la imagen seleccionada
+                    } else{
+                         echo '<img src="data:image/png;base64,'.$imageData;
                     }
+                    
                 }
             </script>
         </section>
@@ -121,6 +125,17 @@
         <section  class="seccionesPerfil">
            <button class="guardarCambios">Guardar Cambios</button>
         </section>
+        <?php
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (isset($_FILES['imagen_perfil']) && $_FILES['imagen_perfil']['error'] === 0) {
+                $tmpPath = $_FILES['imagen_perfil']['tmp_name'];
+                $imageData = base64_encode(file_get_contents($tmpPath));
+            } else {
+                echo 'No se recibió imagen.';
+            }
+        }
+        ?>
+
            </form>
     </div>
     <div class="suggestions">
@@ -167,6 +182,7 @@ function prepareRedimensionar() {
     }
 }
 </script>
+
 </body>
 </html>
 

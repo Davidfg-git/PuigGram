@@ -9,12 +9,6 @@ if (!$id) {
 
 include '../backend/db/db.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['imagen_redimensionada'])) {
-    $_SESSION['imagen_redimensionada'] = $_POST['imagen_redimensionada'];
-    header('Location: ../backend/php/profile.php');
-    exit;
-}
-
 $src = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['imagen'])) {
     $src = $_POST['imagen'];
@@ -26,12 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['imagen'])) {
     $stmt->execute(['id' => $id]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user && !empty($user['imagen_perfil'])) {
-        $imagenCodificada = base64_encode($user['imagen_perfil']);
-        $src = "data:image/png;base64," . $imagenCodificada;
-    } else {
-        $src = "../../public/assets/default/default-image.jpg";
-    }
+    $src = !empty($user['imagen_perfil']) ? $user['imagen_perfil'] : "../../public/assets/default/default-image.jpg";
 }
 ?>
 
@@ -140,9 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['imagen'])) {
         let isDragging = false;
         let lastX, lastY;
 
-        image.onload = function () {
-            centerImage();
-        };
+        image.onload = () => centerImage();
 
         function centerImage() {
             offsetX = 0;
@@ -173,10 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['imagen'])) {
             e.preventDefault();
         });
 
-        window.addEventListener('mouseup', () => {
-            isDragging = false;
-        });
-
+        window.addEventListener('mouseup', () => isDragging = false);
         window.addEventListener('mousemove', (e) => {
             if (!isDragging) return;
 
@@ -234,31 +218,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['imagen'])) {
                 ctx.drawImage(tempImg, -tempImg.width / 2, -tempImg.height / 2);
                 ctx.restore();
 
-                canvas.toBlob(blob => {
-                    const reader = new FileReader();
-                    reader.onloadend = function () {
-                        const base64data = reader.result;
-                        const form = document.createElement('form');
-                        form.method = 'POST';
-                        form.action = window.location.href;
-
-                        const input = document.createElement('input');
-                        input.type = 'hidden';
-                        input.name = 'imagen_redimensionada';
-                        input.value = base64data;
-
-                        form.appendChild(input);
-                        document.body.appendChild(form);
-                        form.submit();
-                    };
-                    reader.readAsDataURL(blob);
-                }, 'image/png');
+                // Exportar como base64 y guardar temporalmente en el navegador
+                const dataUrl = canvas.toDataURL('image/png');
+                localStorage.setItem('imagenRedimensionada', dataUrl);
+                window.location.href = '../backend/php/profile.php';
             };
 
             tempImg.src = image.src;
         });
 
-        // Evitar arrastrar imagen fuera del navegador
         image.addEventListener('dragstart', e => e.preventDefault());
     </script>
 </body>
