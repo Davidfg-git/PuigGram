@@ -84,7 +84,26 @@ if (empty($imagenPerfil)) {
 </form>
 
 </div>
-
+<div class="suggestions">
+<h2>Sugerencias</h2>
+     <ul>
+         <li>
+         <img src="<?= !empty($sugerencias[0]['src']) ? $sugerencias[0]['src'] : '../../public/assets/default/default-image.jpg' ?>" alt="Profile Picture">
+         <span><?= htmlspecialchars($sugerencias[0]['nombre_usuario']) ?></span>
+             <button>Seguir</button>
+         </li>
+         <li>
+         <img src="<?= !empty($sugerencias[1]['src']) ? $sugerencias[1]['src'] : '../../public/assets/default/default-image.jpg' ?>" alt="Profile Picture">
+             <span><?= htmlspecialchars($sugerencias[1]['nombre_usuario']) ?></span>
+             <button>Seguir</button>
+         </li>
+         <li>
+         <img src="<?= !empty($sugerencias[2]['src']) ? $sugerencias[2]['src'] : '../../public/assets/default/default-image.jpg' ?>" alt="Profile Picture">
+             <span><?= htmlspecialchars($sugerencias[2]['nombre_usuario']) ?></span>
+             <button>Seguir</button>
+         </li>
+     </ul>
+ </div>
 <script>
 function actualizarImagen() {
     const fileInput = document.getElementById('fileInput');
