@@ -3,7 +3,14 @@ session_start();
 include '../../backend/db/db.php';
 include '../../backend/php/usuariosDAO.php';
 $id = $_SESSION['user_id'];
-if (!empty($_FILES['imagen_perfil']['tmp_name'])) {
+if (!empty($_FILES['imagen_perfil_real']['name'])) {
+    $imagen = $_FILES['imagen_perfil_real'];
+    $nombreDeImagen = 'imagen_perfil_real';
+} else {
+    $imagen = $_FILES['imagen_perfil'];
+    $nombreDeImagen = 'imagen_perfil';
+}
+if (!empty($_FILES[$nombreDeImagen]['tmp_name'])) {
     
     // Validar tamaño
     if ($_FILES["imagen_perfil"]["size"] > 5000000) { // 5 MB
@@ -12,7 +19,7 @@ if (!empty($_FILES['imagen_perfil']['tmp_name'])) {
     }
 
     // Obtener extensión y generar nombre único
-    $extension = pathinfo($_FILES['imagen_perfil']['name'], PATHINFO_EXTENSION);
+    $extension = pathinfo($_FILES[$nombreDeImagen]['name'], PATHINFO_EXTENSION);
     $nombreArchivo = $id . '.' . $extension;
     $rutaDestino = '../../public/assets/images/profile/' . $nombreArchivo;
     $pattern = '../../public/assets/images/profile/' . $id . '.*';
@@ -21,17 +28,17 @@ if (!empty($_FILES['imagen_perfil']['tmp_name'])) {
         unlink($archivo);
     }
     // Mover el archivo a la carpeta de destino
-    if (move_uploaded_file($_FILES['imagen_perfil']['tmp_name'], $rutaDestino)) {
+    if (move_uploaded_file($_FILES[$nombreDeImagen]['tmp_name'], $rutaDestino)) {
         // Guardar la ruta relativa
        
-        $imagenPerfil = 'public/images/profile/' . $nombreArchivo;
+        $imagenPerfil = '../../public/images/profile/' . $nombreArchivo;
     } else {
         echo "Error al subir la imagen.";
         exit;
     }
 } else {
     // Si no se subió una nueva imagen, conservar la actual
-    $imagenPerfil = $_SESSION['imagen_perfil'];
+    $imagenPerfil = $_SESSION[$nombreDeImagen];
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre = $_POST['nombre'];
@@ -47,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($resultado) {
         // También puedes actualizar la variable de sesión si la usas en otros lados
-        $_SESSION['imagen_perfil'] = $imagenPerfil;
+        $_SESSION[$nombreDeImagen] = $imagenPerfil;
         header("Location: profile.php?success=1");
         exit;
     } else {

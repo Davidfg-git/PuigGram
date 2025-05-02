@@ -26,12 +26,13 @@ body {
     text-align: center;
     padding: 20px 0;
     margin: 0;
-     font-family: 'Dancing Script'
+    font-family: 'Dancing Script';
 }
 
 .sidebar ul {
     list-style: none;
     padding: 0;
+    
 }
 
 .sidebar ul li {

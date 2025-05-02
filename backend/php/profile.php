@@ -1,193 +1,146 @@
 <?php
+session_start();
+$id = $_SESSION['user_id'];
 
-  session_start();  // Iniciar sesión
+include '../../backend/db/db.php';
+$sql = "SELECT * FROM Usuarios WHERE id_usuario = :id";
+$stmt = $pdo->prepare($sql);
+$stmt->execute(['id' => $id]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-  $id = $_SESSION['user_id'];
-  
-  //$id = 2; // Temporal
-  include '../../backend/db/db.php';  // Incluir archivo de conexión a la base de datos
-  //seleccionar datos de la base de datos
-  $sql = "SELECT * FROM Usuarios WHERE id_usuario = :id";
-  $stmt = $pdo->prepare($sql);
-  $stmt->execute(['id' => $id]);  
-  $user = $stmt->fetch(PDO::FETCH_ASSOC);
-  // utilizar los datos seleccionados para mostrarlos en el placeholder del formulario
-  $nombre = $user['nombre_completo']; 
-  $username = $user['nombre_usuario'];
-  $descripcion = $user['descripcion'];
-  $imagenPerfil = $user['imagen_perfil'];
-    if ((empty($imagenPerfil))) {
-        $imagenPerfil = null;
-    }
- 
-
-    
-
+$nombre = $user['nombre_completo'];
+$username = $user['nombre_usuario'];
+$descripcion = $user['descripcion'];
+$imagenPerfil = $user['imagen_perfil'];
+if (empty($imagenPerfil)) {
+    $imagenPerfil = null;
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio</title>
-    <link rel="stylesheet" href="../../public/assets/styles/mainStyle.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
-    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inicio</title>
+<link rel="stylesheet" href="../../public/assets/styles/mainStyle.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="sidebar">
-        <h1>PuigGram</h1>
-        <ul>
-            <li><a href="mainPage.html"><i class="bi bi-house"></i> Inicio</a></li>
-            <li><a href="explore.html"><i class="bi bi-search"></i>Explorar</a></li>
-            <li><a href="messages.html"><i class="bi bi-chat"></i>Mensajes</a></li>
-            <li><a href="notifications.html"><i class="bi bi-bell"></i>Notificaciones</a></li>
-            <li><a href="publish.html"><i class="bi bi-plus-square"></i>Publicar</a></li>
-            <li><a href="profile.php"><i class="bi bi-person"></i>Perfil</a></li>
-            <li><a href="settings.html"><i class="bi bi-gear"></i>Configuración</a></li>
-        </ul>
-    </div>
 
-    <div class="main">
-        <div class="post">
-            <div class="post-header">
-                <p class="inicioText">PERFIL</p>
-            </div>
-        </div>
-    </div>
-    <div class="contenido" style="justify-content: center;">
-
-    <form action="changeProfile.php" method="POST" enctype="multipart/form-data" class="formularioConfiguracion">
-        <section class="seccionesPerfil">
-            <label for="file" class="formularioCambioPerfil">Imagen de perfil</label>
-            
-            <!-- Mostrar la imagen actual (o la imagen predeterminada si no hay ninguna) -->
-            <img class="imgPerfilPrev" id="perfilImagen" src="<?= $imagenPerfil ?>" alt="Profile Picture">
-            
-            <input type="file" id="fileInput" style="display: none;" name="imagen_perfil" accept="image/webp,image/avif,image/jpeg,image/png" onchange="mostrarNombreArchivo(); actualizarImagen()">
-            
-            <!-- Botón que simula el input file -->
-            <button class="editarImagen" type="button" onclick="document.getElementById('fileInput').click();">
-                Editar imagen
-            </button>
-            
-            <!-- Cambiar el botón de redimensionar por este: -->
-            <button class="redimensionarImagen" type="button" onclick="prepareRedimensionar()">
-    Redimensionar imagen
-</button>
-    
-            <p id="fileNameDisplay" style="display: inline; margin-top: 10px; font-size: 10px; font-style: italic;"></p>
-            <script>
-                function mostrarNombreArchivo() {
-                    const fileInput = document.getElementById('fileInput');
-                    const fileNameDisplay = document.getElementById('fileNameDisplay');
-                    
-                }
-
-                // Función para actualizar la imagen de perfil en la vista previa
-                function actualizarImagen() {
-                    const fileInput = document.getElementById('fileInput');
-                    const perfilImagen = document.getElementById('perfilImagen');
-
-                    // Si hay una imagen seleccionada, la mostramos en la etiqueta <img>
-                    if (fileInput.files && fileInput.files[0]) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            perfilImagen.src = e.target.result;  // Cambia el src de la imagen
-                        };
-                        reader.readAsDataURL(fileInput.files[0]);  // Lee la imagen seleccionada
-                    } else{
-                         echo '<img src="data:image/png;base64,'.$imageData;
-                    }
-                    
-                }
-            </script>
-        </section>
-
-        <section  class="seccionesPerfil">
-            <label for=""  class="formularioCambioPerfil">Nombre </label> 
-            <input type="text" class="nombre" value="<?php echo $nombre; ?>" id="nombre" name="nombre">
-        </section>
-        
-        <section  class="seccionesPerfil">
-            <label for=""  class="formularioCambioPerfil" >Nombre de usuario</label> 
-            <input type="text" class="nombre" id="userName"  name="userName" value="<?php echo $username; ?>" >
-        </section>
-
-        <section  class="seccionesPerfil">
-            <label for=""  class="formularioCambioPerfil">Presentación </label>
-            <input type="text" class="nombre"  id="presentacion" name="presentacion" max=300 value="<?php echo $descripcion; ?>"> 
-        </section>
-    
-        <section  class="seccionesPerfil">
-           <button class="guardarCambios">Guardar Cambios</button>
-        </section>
-        <?php
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (isset($_FILES['imagen_perfil']) && $_FILES['imagen_perfil']['error'] === 0) {
-                $tmpPath = $_FILES['imagen_perfil']['tmp_name'];
-                $imageData = base64_encode(file_get_contents($tmpPath));
-            } else {
-                echo 'No se recibió imagen.';
-            }
-        }
-        ?>
-
-           </form>
-    </div>
-    <div class="suggestions">
-    <h2>Sugerencias</h2>
+<div class="sidebar">
+    <h1>PuigGram</h1>
     <ul>
-        <li>
-        <img src="<?= !empty($sugerencias[0]['src']) ? $sugerencias[0]['src'] : '../../public/assets/default/default-image.jpg' ?>" alt="Profile Picture">
-        <span><?= htmlspecialchars($sugerencias[0]['nombre_usuario']) ?></span>
-            <button>Seguir</button>
-        </li>
-        <li>
-        <img src="<?= !empty($sugerencias[1]['src']) ? $sugerencias[1]['src'] : '../../public/assets/default/default-image.jpg' ?>" alt="Profile Picture">
-            <span><?= htmlspecialchars($sugerencias[1]['nombre_usuario']) ?></span>
-            <button>Seguir</button>
-        </li>
-        <li>
-        <img src="<?= !empty($sugerencias[2]['src']) ? $sugerencias[2]['src'] : '../../public/assets/default/default-image.jpg' ?>" alt="Profile Picture">
-            <span><?= htmlspecialchars($sugerencias[2]['nombre_usuario']) ?></span>
-            <button>Seguir</button>
-        </li>
+        <li><a href="mainPage.html"><i class="bi bi-house"></i> Inicio</a></li>
+        <li><a href="explore.html"><i class="bi bi-search"></i>Explorar</a></li>
+        <li><a href="messages.html"><i class="bi bi-chat"></i>Mensajes</a></li>
+        <li><a href="notifications.html"><i class="bi bi-bell"></i>Notificaciones</a></li>
+        <li><a href="publish.html"><i class="bi bi-plus-square"></i>Publicar</a></li>
+        <li><a href="profile.php"><i class="bi bi-person"></i>Perfil</a></li>
+        <li><a href="settings.html"><i class="bi bi-gear"></i>Configuración</a></li>
     </ul>
 </div>
+
+<div class="main">
+    <div class="post">
+        <div class="post-header">
+            <p class="inicioText">PERFIL</p>
+        </div>
+    </div>
+</div>
+
+<div class="contenido" style="justify-content: center;">
+
+<form action="changeProfile.php" method="POST" enctype="multipart/form-data" class="formularioConfiguracion">
+    <section class="seccionesPerfil">
+        <label for="file" class="formularioCambioPerfil">Imagen de perfil</label>
+        <img class="imgPerfilPrev" id="perfilImagen" src="<?= $imagenPerfil . '?v=' . time(); ?>" alt="Profile Picture">
+        
+        <input type="file" name="imagen_perfil" id="imagenRedimensionadaInput" style="display: none;">
+        <input type="file" id="fileInput" style="display: none;" name="imagen_perfil_real" accept="image/webp,image/avif,image/jpeg,image/png" onchange="actualizarImagen()">
+        <button class="editarImagen" type="button" onclick="document.getElementById('fileInput').click();">Editar imagen</button>
+        <button class="redimensionarImagen" type="button" onclick="prepareRedimensionar()">Redimensionar imagen</button>
+    </section>
+
+    <section class="seccionesPerfil">
+        <label class="formularioCambioPerfil">Nombre</label>
+        <input type="text" class="nombre" value="<?= $nombre ?>" id="nombre" name="nombre">
+    </section>
+
+    <section class="seccionesPerfil">
+        <label class="formularioCambioPerfil">Nombre de usuario</label>
+        <input type="text" class="nombre" id="userName" name="userName" value="<?= $username ?>">
+    </section>
+
+    <section class="seccionesPerfil">
+        <label class="formularioCambioPerfil">Presentación</label>
+        <input type="text" class="nombre" id="presentacion" name="presentacion" max="300" value="<?= $descripcion ?>">
+    </section>
+
+    <section class="seccionesPerfil">
+        <button class="guardarCambios">Guardar Cambios</button>
+    </section>
+</form>
+
+</div>
+
 <script>
+function actualizarImagen() {
+    const fileInput = document.getElementById('fileInput');
+    const perfilImagen = document.getElementById('perfilImagen');
+    if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            perfilImagen.src = e.target.result;
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+    }
+    
+}
+
 function prepareRedimensionar() {
     const imagenSrc = document.getElementById('perfilImagen').src;
-    
-    if(imagenSrc.includes('data:image')) {
-        // Para imágenes base64, usar POST
+    if (imagenSrc.includes('data:image')) {
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = '../../redimensionador/redimensionador.php';
-        
         const input = document.createElement('input');
         input.type = 'hidden';
         input.name = 'imagen';
         input.value = imagenSrc;
-        
         form.appendChild(input);
         document.body.appendChild(form);
         form.submit();
     } else {
-        // Para rutas de archivo, usar GET
         window.location.href = `../../redimensionador/redimensionador.php?imagen=${encodeURIComponent(imagenSrc)}`;
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const dataUrl = localStorage.getItem('imagenRedimensionada');
+    const perfilImagen = document.getElementById('perfilImagen');
+    const inputRedimensionada = document.getElementById('imagenRedimensionadaInput');
+
+    if (dataUrl) {
+        perfilImagen.src = dataUrl;
+
+        // Convertir DataURL en archivo y asignarlo al input tipo file
+        fetch(dataUrl)
+            .then(res => res.blob())
+            .then(blob => {
+                const file = new File([blob], 'perfil_redimensionado.png', { type: 'image/png' });
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                inputRedimensionada.files = dataTransfer.files;
+            });
+
+        localStorage.removeItem('imagenRedimensionada');
+    }
+});
+
+
 </script>
 
 </body>
 </html>
-
-            <!-- 
-                CORREGIR FOTOS DE SUGERENCIAS
-                SE VE MAL EN NAVEGACIÓN PRIVADA
-
-            -->
