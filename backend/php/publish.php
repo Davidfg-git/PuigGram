@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio</title>
     <link rel="stylesheet" href="../../public/assets/styles/mainStyle.css">
+    <script defer src="scripts.js"></script>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
-
-
+ 
 </head>
 <body>
     <div class="sidebar">
@@ -34,6 +35,20 @@
     </div>
     <div class="contenido">
         
+    <div class="ContenedorPublicacion">
+        <div class="primeraSeleccion">
+    <i class="bi bi-images"></i>
+                <i class="bi bi-camera-reels"></i>
+        <p class="selec_imgPub">Pon tus fotos o videos aquí</p><br>
+        <div id="file-select" class="">
+        <input type="file" id="file-input" accept="image/jpeg, video/mp4" class="subirImagen" style="display: none;">
+
+<button type="button" class="botonera" onclick="document.getElementById('file-input').click();">
+  SELECCIONAR IMAGEN O VIDEO
+</button>
+        </div>
+        </div>
+   
     </div>
     <div class="suggestions">
         <h2>Sugerencias</h2>

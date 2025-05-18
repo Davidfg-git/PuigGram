@@ -36,7 +36,7 @@ if (empty($imagenPerfil)) {
         <li><a href="explore.html"><i class="bi bi-search"></i>Explorar</a></li>
         <li><a href="messages.html"><i class="bi bi-chat"></i>Mensajes</a></li>
         <li><a href="notifications.html"><i class="bi bi-bell"></i>Notificaciones</a></li>
-        <li><a href="publish.html"><i class="bi bi-plus-square"></i>Publicar</a></li>
+        <li><a href="publish.php"><i class="bi bi-plus-square"></i>Publicar</a></li>
         <li><a href="profile.php"><i class="bi bi-person"></i>Perfil</a></li>
         <li><a href="settings.html"><i class="bi bi-gear"></i>Configuración</a></li>
     </ul>

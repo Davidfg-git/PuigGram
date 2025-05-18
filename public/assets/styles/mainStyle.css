@@ -476,3 +476,46 @@ input:checked + .slider:before {
   .contenido{
     color: #4D4D4D ;
   }
+
+.ContenedorPublicacion {
+    
+    width: auto;
+    height: fit-content;
+    
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+.subirImagen{
+    background-color:#007c8000 ;
+    display: flex;
+}
+.subirImagen::file-selector-button {
+    content: "Seleccionar archivo";
+  }
+.ContenedorPublicacion i {
+    
+    font-size: 100px;
+    
+}
+  .subirImagen {
+    color: transparent;
+    margin-top: 23px;
+
+  }
+  .selec_imgPub{
+   
+    font-size: 20px;
+    font-style: bold;
+    
+  }
+
+  .botonera{
+    display: flex;
+    border: #16393a;
+    font-size: 20px;
+    border-radius: 7px;
+   background-color:#007b80 ;
+   color: white;
+  }
