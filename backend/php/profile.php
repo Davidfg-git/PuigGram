@@ -1,7 +1,12 @@
 <?php
 session_start();
 $id = $_SESSION['user_id'];
+/*
 
+FALTA INLCUIR QUE CUANDO NO EXISTA ID DE USUARIO (NO LOGGED)
+SE REDIRIGA A INDEX PARA INICIAR SESIÓN
+
+*/
 include '../../backend/db/db.php';
 $sql = "SELECT * FROM Usuarios WHERE id_usuario = :id";
 $stmt = $pdo->prepare($sql);

@@ -153,14 +153,20 @@ body {
 }
 
 .contenido {
+    
     margin-left: 14.1%;
     display: flex;
-    background-color: rgba(255, 255, 255, 0);
-    width: 69.4%;
-    height: 87.5vh;
+    flex-direction: column;
     background-color: #ffffff;
+    width: 69.4%;
+    min-height: 87.5vh;
     border: 1px solid #e6e6e6;
     border-radius: 8px;
+    color: #4D4D4D;
+    padding: 20px;
+    box-sizing: border-box;
+
+
 }
 
 .inicioText {
@@ -519,3 +525,149 @@ input:checked + .slider:before {
    background-color:#007b80 ;
    color: white;
   }
+
+  .publicacion-container {
+  max-width: 500px;
+  margin: 50px auto;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  padding: 20px;
+  margin-top: -10%;
+}
+
+.titulo-publicacion {
+  font-size: 26px;
+  margin-bottom: 30px;
+}
+
+.upload-area {
+  border: 2px dashed #009688;
+  border-radius: 20px;
+  padding: 35px;
+  background: #f9f9f9;
+  transition: background 0.3s ease;
+  cursor: pointer;
+}
+
+.upload-area:hover {
+  background: #e0f2f1;
+}
+
+.upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.upload-icon {
+  font-size: 50px;
+  margin-bottom: 10px;
+  color: #009688;
+}
+
+.upload-text {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.formatos-info {
+  font-size: 12px;
+  color: #555;
+}
+
+.preview-area {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.preview-area img,
+.preview-area video {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.btn-publicar {
+  margin-top: 30px;
+  padding: 12px 30px;
+  background-color: #009688;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-publicar:hover {
+  background-color: #00796b;
+}
+/* Efecto deslizante del upload area */
+.deslizar-izquierda {
+  transform: translateX(-120%);
+  transition: transform 0.5s ease;
+}
+
+/* Mostrar preview */
+.mostrar-preview {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.5s ease;
+}
+
+/* Estilo para la imagen preview */
+.preview-area img {
+  max-width: 250px;
+  max-height: 250px;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+/* Estilo del textarea descripción */
+#descripcion {
+  display: block;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 250px;
+  height: 80px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  resize: none;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+}
+.preview-area img {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.preview-area img:hover {
+  transform: scale(1.8);
+  z-index: 10;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+.preview-area img {
+   /* 10% más pequeña que su contenedor */
+  height: auto;
+  transition: transform 0.3s ease;
+  border-radius: 10px;
+}
+
+/* Efecto de ampliar al pasar el ratón */
+.preview-area img:hover {
+  transform: scale(2.3);
+  z-index: 10;
+}
+.primeraSeleccion{
+    margin-top: -18%;
+}
