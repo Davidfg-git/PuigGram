@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db.php'; // Conexión a la base de datos
+include '../../backend/db/db.php'; // Conexión a la base de datos
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Recoger datos del formulario
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- Custom CSS -->
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="../../public/assets/styles/registerStyle.css">
+    <link rel="stylesheet" href="../../public/assets/styles/registerstyles.css">
     
 </head>
 <body class="bg-light">
