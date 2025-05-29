@@ -1,9 +1,12 @@
 <?php
-session_start();  // Iniciar sesión
+session_start();
 $id = $_SESSION['user_id'];
-if (isset($_GET['mensaje'])) {
-    echo "<script>alert('" . htmlspecialchars($_GET['mensaje']) . "');</script>";
-}
+/*
+
+FALTA INLCUIR QUE CUANDO NO EXISTA ID DE USUARIO (NO LOGGED)
+SE REDIRIGA A INDEX PARA INICIAR SESIÓN
+
+*/
 include '../../backend/db/db.php';
 $sql = "SELECT * FROM Usuarios WHERE id_usuario = :id";
 $stmt = $pdo->prepare($sql);
@@ -17,6 +20,7 @@ $imagenPerfil = $user['imagen_perfil'];
 if (empty($imagenPerfil)) {
     $imagenPerfil = null;
 }
+
 // Ejemplo de consulta para obtener sugerencias (ajusta según tu lógica y estructura de base de datos)
 $stmt = $pdo->query("SELECT nombre_usuario, imagen_perfil FROM usuarios WHERE id_usuario != $id LIMIT 3");
 $sugerencias = [];
@@ -32,8 +36,6 @@ while (count($sugerencias) < 3) {
     $sugerencias[] = ['nombre_usuario' => 'Usuario', 'src' => null];
 }
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,11 +43,10 @@ while (count($sugerencias) < 3) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio</title>
     <link rel="stylesheet" href="../../public/assets/styles/mainStyle.css">
-    <script defer src="scripts.js"></script>
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
- 
+
+
 </head>
 <body>
     <div class="sidebar">
@@ -64,42 +65,35 @@ while (count($sugerencias) < 3) {
     <div class="main">
         <div class="post">
             <div class="post-header">
-                <p class="inicioText">NUEVA PUBLICACIÓN</p>
+                <p class="inicioText">CONFIGURACIÓN</p>
             </div>
-            
         </div>
     </div>
-    <div class="subirContenidoArriba">
-    <div class="contenido">
+    <div class="contenido" style="justify-content: center;">
         
-    <div class="ContenedorPublicacion">
-        <div class="primeraSeleccion">
-<div class="publicacion-container">
-  <h2 class="titulo-publicacion">📸 Nueva publicación</h2>
-
-  <form id="form-publicacion" action="../../backend/php/uploadImage.php" method="POST" enctype="multipart/form-data">
-    <div class="upload-area">
-      <label for="file-upload" class="upload-label">
-        <div class="upload-icon">📤</div>
-        <p class="upload-text">Haz clic o arrastra una imagen</p>
-        <small class="formatos-info">Formatos admitidos: JPG, PNG</small>
-        <input id="file-upload" name="imagen" type="file" accept="image/*" hidden required>
-      </label>
-
-      <div id="preview" class="preview-area"></div>
-    </div>
-
-    <!-- Este input oculto se rellena desde JS cuando se genera el textarea -->
-    <input type="hidden" name="descripcion" id="descripcion-hidden">
-
-    <button type="submit" class="btn-publicar">Publicar</button>
-  </form>
-</div>
-</div>
-
-        </div>
-        </div>
+       <form action="" class="formularioConfiguracion">
+        <label for=""  class="formularioCambio" style="position: absolute;">Privacidad</label> 
+        
+       
+        <section class="bordes"> 
+            <label class="switch">
+           <span class="selectA">Público</span>
+            <input type="checkbox">
+            
+            <span class="slider"></span>
+            <span class="selectB">Privado</span>
+        </label>
+        </section>
    
+        <section class="bordes"><label class="formularioCambio" for="cambiarContraseña"><a class="enlacesConfiguracion" href="usuariosDAO.php">Cambiar Contraseña</a></label><br>
+        </section>
+
+            <section class="bordes"><label  class="formularioCambio" for=""><a class="enlacesConfiguracion" href="logout.php">Cerrar Sesión</a></label><br>
+            
+
+                <label  class="formularioCambio" for=""><a class="enlacesConfiguracion" href="usuariosDAO.php">Eliminar Cuenta</label><br>
+                </section>
+       </form>
     </div>
     <div class="suggestions">
         <h2>Sugerencias</h2>
@@ -121,60 +115,6 @@ while (count($sugerencias) < 3) {
          </li>
         </ul>
     </div>
-    <script>
-    document.addEventListener("DOMContentLoaded", () => {
-  const fileInput = document.getElementById("file-upload");
-  const previewArea = document.getElementById("preview");
-  const uploadArea = document.querySelector(".upload-area");
-  const form = document.getElementById("form-publicacion");
-  const descripcionHidden = document.getElementById("descripcion-hidden");
-
-  const handleFile = (file) => {
-    if (file && file.type.startsWith("image/")) {
-      const reader = new FileReader();
-
-      reader.onload = (event) => {
-        previewArea.innerHTML = `
-          <img src="${event.target.result}" alt="Previsualización" class="preview-img">
-          <textarea id="descripcion-textarea" maxlength="100" placeholder="Escribe una descripción (100 carácteres permitidos)"></textarea>
-        `;
-        previewArea.classList.add("mostrar-preview");
-      };
-
-      reader.readAsDataURL(file);
-    }
-  };
-
-  fileInput.addEventListener("change", (e) => {
-    handleFile(e.target.files[0]);
-  });
-
-  uploadArea.addEventListener("dragover", (e) => {
-    e.preventDefault();
-    uploadArea.classList.add("dragover");
-  });
-
-  uploadArea.addEventListener("dragleave", () => {
-    uploadArea.classList.remove("dragover");
-  });
-
-  uploadArea.addEventListener("drop", (e) => {
-    e.preventDefault();
-    uploadArea.classList.remove("dragover");
-    const file = e.dataTransfer.files[0];
-    handleFile(file);
-  });
-
-  // Antes de enviar el formulario, pasar la descripción del textarea al input hidden
-  form.addEventListener("submit", (e) => {
-    const descripcionTextarea = document.getElementById("descripcion-textarea");
-    if (descripcionTextarea) {
-      descripcionHidden.value = descripcionTextarea.value;
-    }
-  });
-});
-element.style.removeProperty('justify-content');
-
-</script>
+    
 </body>
 </html>

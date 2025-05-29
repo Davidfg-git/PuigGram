@@ -3,7 +3,7 @@ session_start();  // Iniciar sesión
 
 // Verificar si el usuario ya está logueado
 if (isset($_SESSION['user_id'])) {
-    header("Location: mainPage.html");  // Si ya está logueado, redirigir a la página principal
+    header("Location: mainPage.php");  // Si ya está logueado, redirigir a la página principal
     exit;
 }
 
@@ -29,14 +29,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['username'] = $user['nombre_usuario'];  // Cambiar 'username' a 'nombre_usuario'
 
         // Redirigir a la página principal (mainPage.html)
-        header("Location: mainPage.html");
+        header("Location: mainPage.php");
         exit;
     } else {
         // Si las credenciales no son correctas
         $error_message = "Correo o contraseña incorrectos.";
     }
 }
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">

@@ -1,91 +1,162 @@
 # PuigGram
 
-PuigGram es una aplicación web sencilla para compartir fotos, inspirada en plataformas populares de redes sociales. Permite a los usuarios subir, compartir y visualizar fotos de manera fácil y rápida.
+PuigGram es una aplicación web para compartir fotos, inspirada en redes sociales modernas. Permite a los usuarios registrarse, iniciar sesión, personalizar su perfil, subir imágenes, explorar publicaciones y más.
 
-## Características
+---
 
-- **Autenticación de usuarios**: Registro e inicio de sesión seguro.
-- **Gestión de perfiles**: Personalización de perfiles de usuario.
-- **Subida y compartición de fotos**: Los usuarios pueden subir imágenes y compartirlas con otros.
-- **Feed de fotos**: Visualización de las fotos compartidas por otros usuarios.
-- **Interacciones sociales**: Posibilidad de dar "me gusta" y comentar en las fotos.
+## Características principales
+
+- **Registro e inicio de sesión de usuarios**  
+  Autenticación segura con sesiones PHP.
+- **Gestión de perfiles**  
+  Cambia tu nombre, nombre de usuario, presentación y foto de perfil (la imagen se almacena en `/public/images/profile` y la ruta en la base de datos).
+- **Subida y publicación de imágenes**  
+  Los usuarios pueden subir imágenes (JPG, PNG) que se almacenan en `/public/assets/uploads/{user_id}/` y la ruta se guarda en la base de datos.
+- **Feed y exploración**  
+  Visualiza publicaciones propias y de otros usuarios.
+- **Interacciones sociales**  
+  Sugerencias de usuarios, posibilidad de seguir a otros (estructura preparada).
+- **Configuración y privacidad**  
+  Cambia tu contraseña, elimina tu cuenta y ajusta la privacidad desde la sección de configuración.
+- **Política de privacidad**  
+  Página dedicada con información sobre el tratamiento de datos.
+
+---
 
 ## Requisitos previos
 
-Antes de comenzar, asegúrate de tener lo siguiente instalado en tu sistema:
+- [XAMPP](https://www.apachefriends.org/) o similar (Apache + MySQL)
+- PHP 7.4 o superior
+- MySQL/MariaDB
+- Navegador web moderno
 
-- Un servidor local como [XAMPP](https://www.apachefriends.org/) o [WAMP](https://www.wampserver.com/).
-- PHP (versión 7.4 o superior).
-- MySQL o MariaDB para la base de datos.
-- Un navegador web moderno.
+---
 
 ## Instalación
 
-Sigue estos pasos para configurar el proyecto en tu entorno local:
-
-1. Clona el repositorio:
+1. **Clona el repositorio:**
     ```bash
     git clone https://github.com/tu-usuario/PuigGram.git
     ```
+2. **Coloca la carpeta en tu directorio de XAMPP:**  
+   Ejemplo: `C:\Users\david\Desktop\XAMPP\htdocs\PuigGram`
+3. **Configura la base de datos:**
+    - Inicia Apache y MySQL desde XAMPP.
+    - Crea la base de datos `PuigGram` desde phpMyAdmin.
+    - Importa el script `backend/db/ScriptCreacionBD.sql`.
+4. **Configura la conexión en `backend/db/db.php`:**
+    - Ajusta usuario, contraseña y nombre de la base de datos si es necesario.
+5. **Asegúrate de que las carpetas de imágenes existen:**
+    - `/public/images/profile/` para fotos de perfil.
+    - `/public/assets/uploads/` para publicaciones.
+    - Crea estas carpetas si no existen y otorga permisos de escritura.
 
-2. Navega al directorio del proyecto:
-    ```bash
-    cd PuigGram
-    ```
-
-3. Configura tu servidor local (por ejemplo, XAMPP) y asegúrate de que Apache y MySQL estén activos.
-
-4. Importa el archivo SQL proporcionado en tu base de datos:
-    - Abre phpMyAdmin o tu herramienta de gestión de bases de datos preferida.
-    - Crea una nueva base de datos (por ejemplo, `puiggram`).
-    - Importa el archivo `puiggram.sql` incluido en el proyecto.
-
-5. Actualiza la configuración de conexión a la base de datos en el archivo de configuración del proyecto:
-    - Abre el archivo `config.php` (o equivalente).
-    - Asegúrate de que los valores de host, usuario, contraseña y nombre de la base de datos sean correctos.
-
-## Uso
-
-1. Inicia tu servidor local.
-2. Abre la aplicación en tu navegador web:
-    ```
-    http://localhost/PuigGram
-    ```
-3. Regístrate o inicia sesión para comenzar a compartir fotos.
+---
 
 ## Estructura del Proyecto
 
-- **`/assets`**: Contiene los archivos estáticos como CSS, JavaScript e imágenes.
-- **`/includes`**: Archivos PHP reutilizables como encabezados y pies de página.
-- **`/uploads`**: Carpeta donde se almacenan las fotos subidas por los usuarios.
-- **`config.php`**: Archivo de configuración para la conexión a la base de datos.
-- **`index.php`**: Página principal de la aplicación.
+```
+PuigGram/
+│
+├── backend/
+│   ├── db/
+│   │   ├── db.php
+│   │   └── ScriptCreacionBD.sql
+│   └── php/
+│       ├── index.php
+│       ├── register.php
+│       ├── profile.php
+│       ├── changeProfile.php
+│       ├── usuariosDAO.php
+│       ├── publicacionesDAO.php
+│       ├── publish.php
+│       ├── uploadImage.php
+│       ├── settings.html
+│       ├── changePassword.html
+│       ├── explore.html
+│       ├── mainPage.html
+│       ├── messages.html
+│       ├── notifications.html
+│       ├── privacyPolicy.html
+│       └── ...
+│
+├── public/
+│   ├── assets/
+│   │   ├── styles/
+│   │   │   └── mainStyle.css
+│   │   ├── default/
+│   │   │   └── default-image.jpg
+│   │   └── uploads/
+│   │       └── {user_id}/
+│   └── images/
+│       └── profile/
+│
+├── README.md
+└── LICENSE
+```
+
+---
+
+## Uso
+
+1. Inicia tu servidor local (XAMPP).
+2. Abre en tu navegador:  
+   ```
+   http://localhost/PuigGram/backend/php/index.php
+   ```
+3. Regístrate o inicia sesión para comenzar a compartir fotos.
+
+---
+
+## Notas técnicas
+
+- **Fotos de perfil:**  
+  Se suben a `/public/images/profile/` y solo se guarda la ruta en la base de datos (`imagen_perfil` tipo VARCHAR).
+- **Publicaciones:**  
+  Las imágenes se suben a `/public/assets/uploads/{user_id}/` y la ruta se guarda en la base de datos.
+- **Configuración de PHP en VS Code:**  
+  Si usas Windows y tienes PHP en tu escritorio, configura en tu `settings.json`:
+  ```json
+  "php.validate.executablePath": "C:\\Users\\david\\Desktop\\php\\php.exe"
+  ```
+- **Seguridad:**  
+  Las contraseñas actualmente se almacenan en texto plano (mejora recomendada: usar `password_hash` y `password_verify`).
+- **Sugerencias y seguidores:**  
+  El sistema de sugerencias está preparado para mostrar usuarios, pero puedes expandirlo para implementar seguidores reales.
+
+---
 
 ## Contribuciones
 
-¡Las contribuciones son bienvenidas! Si deseas colaborar, sigue estos pasos:
-
+¡Las contribuciones son bienvenidas!  
 1. Haz un fork del repositorio.
-2. Crea una nueva rama para tu funcionalidad o corrección:
+2. Crea una rama para tu funcionalidad:
     ```bash
     git checkout -b nombre-de-tu-rama
     ```
-3. Realiza tus cambios y haz un commit:
+3. Realiza tus cambios y haz commit:
     ```bash
     git commit -m "Descripción de los cambios"
     ```
-4. Envía tus cambios al repositorio remoto:
+4. Envía tus cambios:
     ```bash
     git push origin nombre-de-tu-rama
     ```
 5. Abre un pull request en GitHub.
 
+---
+
 ## Licencia
 
 Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
 
+---
+
 ## Contacto
 
-Si tienes preguntas o sugerencias, no dudes en ponerte en contacto con nosotros a través de [tu-email@ejemplo.com](mailto:tu-email@ejemplo.com).
+¿Dudas o sugerencias?  
+Contáctanos a través de [tu-email@ejemplo.com](mailto:tu-email@ejemplo.com).
+
+---
 
 ¡Gracias por usar PuigGram!

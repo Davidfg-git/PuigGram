@@ -165,10 +165,12 @@ body {
     color: #4D4D4D;
     padding: 20px;
     box-sizing: border-box;
-
+    
 
 }
-
+.subirContenidoArriba{
+    
+}
 .inicioText {
     margin-top: -0.2vh;
     font-size: 20px;
@@ -234,7 +236,7 @@ input:checked + .slider:before {
     background-color: #e8e8e8;
     width: 67.8vw;
     height: 70.4vh;
-    margin-top: 1%;
+    margin-top: -8%;
 }
 
 .bordes {
