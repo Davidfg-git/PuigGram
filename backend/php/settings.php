@@ -85,7 +85,7 @@ while (count($sugerencias) < 3) {
         </label>
         </section>
    
-        <section class="bordes"><label class="formularioCambio" for="cambiarContraseña"><a class="enlacesConfiguracion" href="usuariosDAO.php">Cambiar Contraseña</a></label><br>
+        <section class="bordes"><label class="formularioCambio" for="cambiarContraseña"><a class="enlacesConfiguracion" href="newPassword.php">Cambiar Contraseña</a></label><br>
         </section>
 
             <section class="bordes"><label  class="formularioCambio" for=""><a class="enlacesConfiguracion" href="logout.php">Cerrar Sesión</a></label><br>

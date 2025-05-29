@@ -1,4 +1,6 @@
 <?php
+
+
 class UsuariosDAO{
     private $db;
 
@@ -15,7 +17,7 @@ class UsuariosDAO{
         $stmt->bind_param("sss", $nombre, $email, $password);
         return $stmt->execute();
     }
-
+    
     // actualizar perfil
     public function updatePerfilUsuario($id, $imagenPerfil, $nombre, $nombreUsuario, $presentacion) {
         if ($imagenPerfil === null) {
@@ -81,15 +83,29 @@ class UsuariosDAO{
         return $stmt->execute();
     }
     
-    public function updateUsuarioPassword($id, $nuevaContrasena) {
-        $query = "UPDATE usuarios SET password = ? WHERE id = ?";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param("si", $nuevaContrasena, $id);
-        return $stmt->execute();
+    public function updateUsuarioPassword($id, $passwordOld, $passwordNew) {
+    $query = "SELECT contrasena FROM usuarios WHERE id_usuario = :id";
+    $stmt = $this->db->prepare($query);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($result) {
+        $passwordActual = $result['contrasena'];
+
+        if ($passwordActual === $passwordOld) {
+            $query = "UPDATE usuarios SET contrasena = :newPassword WHERE id_usuario = :id";
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(':newPassword', $passwordNew, PDO::PARAM_STR);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            return $stmt->execute(); // Devuelve true si se actualizó correctamente
+        }
     }
 
-    
-    
+    return false; // Si no coincide o no existe el usuario
+}
+
 }
 
 
