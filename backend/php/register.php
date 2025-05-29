@@ -39,23 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit;
     }
 }
-
-// Ejemplo de consulta para obtener sugerencias (ajusta según tu lógica y estructura de base de datos)
-$stmt = $pdo->query("SELECT nombre_usuario, imagen_perfil FROM usuarios WHERE id_usuario != $id LIMIT 3");
-$sugerencias = [];
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $sugerencias[] = [
-        'nombre_usuario' => $row['nombre_usuario'],
-        'src' => !empty($row['imagen_perfil']) ?  $row['imagen_perfil'] : null
-    ];
-}
-
-// Si hay menos de 3 sugerencias, rellena con valores vacíos para evitar errores
-while (count($sugerencias) < 3) {
-    $sugerencias[] = ['nombre_usuario' => 'Usuario', 'src' => null];
-}
 ?>
-
 
 
 
