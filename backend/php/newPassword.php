@@ -2,7 +2,12 @@
 session_start();
 include '../../backend/db/db.php';
 include 'usuariosDAO.php'; 
-
+if (!isset($_SESSION['user_id'])) {
+    // Redirigir o mostrar error
+    header('Location: index.php');
+    exit();
+}
+$id = $_SESSION['user_id'];
 $usuariosDAO = new UsuariosDAO($pdo); // O $pdo si usas PDO
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_SESSION['user_id']; 

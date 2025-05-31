@@ -2,8 +2,12 @@
 session_start();
 include '../../backend/db/db.php'; // conexión PDO
 include '../../backend/php/publicacionesDAO.php'; // supongo tienes o crearás este DAO
+if (!isset($_SESSION['user_id'])) {
+    // Redirigir o mostrar error
+    header('Location: index.php');
+    exit();
+}
 $id = $_SESSION['user_id'];
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['imagen'])) {
     $imagen = $_FILES['imagen'];
 

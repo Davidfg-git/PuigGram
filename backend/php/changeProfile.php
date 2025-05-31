@@ -2,6 +2,11 @@
 session_start();
 include '../../backend/db/db.php';
 include '../../backend/php/usuariosDAO.php';
+if (!isset($_SESSION['user_id'])) {
+    // Redirigir o mostrar error
+    header('Location: index.php');
+    exit();
+}
 $id = $_SESSION['user_id'];
 if (!empty($_FILES['imagen_perfil_real']['name'])) {
     $imagen = $_FILES['imagen_perfil_real'];

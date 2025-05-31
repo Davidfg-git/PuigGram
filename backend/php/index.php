@@ -3,7 +3,7 @@ session_start();  // Iniciar sesión
 
 // Verificar si el usuario ya está logueado
 if (isset($_SESSION['user_id'])) {
-    header("Location: mainPage.php");  // Si ya está logueado, redirigir a la página principal
+    header('Location: index.php');
     exit;
 }
 

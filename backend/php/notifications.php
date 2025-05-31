@@ -1,7 +1,11 @@
 <?php
 session_start();
-$id = $_SESSION['user_id'];
-/*
+if (!isset($_SESSION['user_id'])) {
+    // Redirigir o mostrar error
+    header('Location: index.php');
+    exit();
+}
+$id = $_SESSION['user_id'];/*
 
 FALTA INLCUIR QUE CUANDO NO EXISTA ID DE USUARIO (NO LOGGED)
 SE REDIRIGA A INDEX PARA INICIAR SESIÓN
@@ -22,14 +26,16 @@ if (empty($imagenPerfil)) {
 }
 
 // Ejemplo de consulta para obtener sugerencias (ajusta según tu lógica y estructura de base de datos)
-$stmt = $pdo->query("SELECT nombre_usuario, imagen_perfil FROM usuarios WHERE id_usuario != $id LIMIT 3");
+$stmt = $pdo->query("SELECT id_usuario, nombre_usuario, imagen_perfil FROM usuarios WHERE id_usuario != $id LIMIT 5");
 $sugerencias = [];
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $sugerencias[] = [
+        'id_usuario' => $row['id_usuario'],
         'nombre_usuario' => $row['nombre_usuario'],
-        'src' => !empty($row['imagen_perfil']) ?  $row['imagen_perfil'] : null
+        'src' => !empty($row['imagen_perfil']) ? $row['imagen_perfil'] : null
     ];
 }
+
 
 // Si hay menos de 3 sugerencias, rellena con valores vacíos para evitar errores
 while (count($sugerencias) < 3) {
@@ -73,24 +79,53 @@ while (count($sugerencias) < 3) {
         
     </div>
     <div class="suggestions">
-        <h2>Sugerencias</h2>
-        <ul>
-            <li>
-         <img src="<?= !empty($sugerencias[0]['src']) ? $sugerencias[0]['src'] : '../../public/assets/default/default-image.jpg' ?>" alt="Profile Picture">
-         <span><?= htmlspecialchars($sugerencias[0]['nombre_usuario']) ?></span>
-             <button>Seguir</button>
-         </li>
-         <li>
-         <img src="<?= !empty($sugerencias[1]['src']) ? $sugerencias[1]['src'] : '../../public/assets/default/default-image.jpg' ?>" alt="Profile Picture">
-             <span><?= htmlspecialchars($sugerencias[1]['nombre_usuario']) ?></span>
-             <button>Seguir</button>
-         </li>
-         <li>
-         <img src="<?= !empty($sugerencias[2]['src']) ? $sugerencias[2]['src'] : '../../public/assets/default/default-image.jpg' ?>" alt="Profile Picture">
-             <span><?= htmlspecialchars($sugerencias[2]['nombre_usuario']) ?></span>
-             <button>Seguir</button>
-         </li>
-        </ul>
-    </div>
+    <h2>Sugerencias</h2>
+    <div class="suggestions">
+    <h2>Sugerencias</h2>
+    <ul>
+    <?php foreach ($sugerencias as $sugerencia): ?>
+        <li>
+            <img src="<?= !empty($sugerencia['src']) ? $sugerencia['src'] : '../../public/assets/default/default-image.jpg' ?>" alt="">
+            <?= htmlspecialchars($sugerencia['nombre_usuario']) ?>
+            <button class="follow-btn" data-id="<?= $sugerencia['id_usuario'] ?>">Seguir</button>
+        </li>
+    <?php endforeach; ?>
+</ul>
+
+</div>
+
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const botonesSeguir = document.querySelectorAll("button[class^='follow']");
+
+    botonesSeguir.forEach(button => {
+        button.addEventListener("click", () => {
+            const id_seguido = button.getAttribute("data-id");
+
+            fetch("../../backend/php/seguir_usuario.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: "id_seguido=" + encodeURIComponent(id_seguido)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    button.textContent = "Siguiendo";
+                    button.disabled = true;
+                    button.classList.add("following");
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        });
+    });
+});
+</script>
 </body>
 </html>
