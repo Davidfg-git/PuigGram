@@ -51,6 +51,7 @@ $sugerencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Inicio</title>
+<link rel="icon" href="../../../icono.ico" type="image/x-icon">
 <link rel="stylesheet" href="../../public/assets/styles/mainStyle.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
@@ -89,6 +90,8 @@ $sugerencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <input type="file" id="fileInput" style="display: none;" name="imagen_perfil_real" accept="image/webp,image/avif,image/jpeg,image/png" onchange="actualizarImagen()">
         <button class="editarImagen" type="button" onclick="document.getElementById('fileInput').click();">Editar imagen</button>
         <button class="redimensionarImagen" type="button" onclick="prepareRedimensionar()">Redimensionar imagen</button>
+        <button class="verPerfil" type="button" onclick="mostrarModal()">Ver mi perfil</button>
+
     </section>
 
     <section class="seccionesPerfil">
@@ -188,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-ddocument.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
     const botonesSeguir = document.querySelectorAll(".follow-btn");
 
     botonesSeguir.forEach(button => {
@@ -223,7 +226,28 @@ ddocument.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
-</script>
+function mostrarModal() {
+  document.getElementById('modalPerfil').style.display = 'block';
+}
 
+function cerrarModal() {
+  document.getElementById('modalPerfil').style.display = 'none';
+}
+
+// Opcional: cerrar haciendo clic fuera del contenido
+window.onclick = function(event) {
+  const modal = document.getElementById('modalPerfil');
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+</script>
+<div id="modalPerfil" class="modal">
+  <div class="modal-contenido">
+    <span class="cerrar" onclick="cerrarModal()">&times;</span>
+    <p>Este es tu perfil flotante.</p>
+  </div>
+</div>
 </body>
 </html>
