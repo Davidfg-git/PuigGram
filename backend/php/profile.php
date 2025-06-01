@@ -285,7 +285,7 @@ window.onclick = function(event) {
     <div class="galeriaImagenes">
     <button id="btn-cargar-menos" class="btn-cargar-menos" style="display:none;">⮜</button>
 
-    <div id="contenedor-imagenes-modal" style="display:flex; gap:10px;">
+    <div id="contenedor-imagenes-modal" class="contenedor-imagenes" style="display:flex; gap:10px;">
         <!-- Aquí se cargarán las imágenes dinámicamente -->
     </div>
 
@@ -313,7 +313,7 @@ window.onclick = function(event) {
 
     for (let i = indiceInicio; i < indiceFin; i++) {
       const divContenedor = document.createElement('div');
-      divContenedor.classList.add('contenedor-imagen');
+      divContenedor.classList.add('contenedor-imagenes');
 
       const figure = document.createElement('figure');
       const img = document.createElement('img');
@@ -347,6 +347,22 @@ window.onclick = function(event) {
 
   // Carga inicial
   cargarImagenes();
+
+  
+document.addEventListener('click', function(e) {
+  const esImagen = e.target.matches('.contenedor-imagenes img');
+
+  if (esImagen) {
+    // Toggle clase zoomed solo en la imagen clicada
+    e.target.classList.toggle('zoomed');
+  } else {
+    // Si clic fuera de imagen, quitar zoom a todas las imágenes
+    document.querySelectorAll('.contenedor-imagenes img.zoomed').forEach(img => {
+      img.classList.remove('zoomed');
+    });
+  }
+});
+
 </script>
 </body>
 </html>

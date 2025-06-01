@@ -894,72 +894,34 @@ padding-left: 5%;
 
    
 }
+
 .galeriaImagenes{
-columns: 3;
 margin-top:18%;
- margin-left: -3%;
-    
+margin-left: -3%;
 }
-.contenedor-imagen {
+.contenedor-imagenes img {
    margin-left: -6%;
    
     width: 230px;
     border-radius: 5px;
     height: 230px;
     overflow: hidden;
-    background-color: #fa0000;
+    background-color: #ececec00;
     transition: 0.4s ease-in-out;
-    box-shadow: 0 5px 12px rgb(0, 0, 0, 0.5);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.212);
     flex: 0.25;
 }
 
 
-.contenedor-imagen:nth-child(2){
-    margin-top: 90px;
+#contenedor-imagenes-modal .contenedor-imagenes:nth-of-type(4) {
+  margin-top: 300px;
+  margin-left: -960px;
 }
-.contenedor-imagen:nth-child(4){
-    margin-top: 90px;
+#contenedor-imagenes-modal .contenedor-imagenes:nth-of-type(5) {
+margin-top: 300px;
 }
-.contenedor-imagen:nth-child(6){
-    margin-top: 90px;
-}
-
-.contenedor-imagen:nth-child(3){
-
-    margin-left: -20%;
-}
-
-.contenedor-imagen:nth-child(4){
-    margin-left: -20%;
-}
-
-.contenedor-imagen:nth-child(5){
-    margin-left: -40%;
-}
-
-.contenedor-imagen:nth-child(6){
-    margin-left: -40%;
-}
-
-
-.contenedor-imagen:hover {
-    
-    cursor: pointer;
-    border-radius: 8px;
-}
-
-
-.contenedor-imagen img {
-    height: 230px;
-    width: 230px;
-    object-fit: cover;
-}
-.contenedor-galeria {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    position: relative;
-    margin-right: 40px;
+#contenedor-imagenes-modal .contenedor-imagenes:nth-of-type(6) {
+margin-top: 300px;
 }
 
 
@@ -976,8 +938,8 @@ margin-top:18%;
     background: #333;
     color: white;
     border-radius: 50%;
-    margin-top: 22%;
-    margin-left:25%;
+    margin-top: -23%;
+    margin-left:80%;
 }
 .btn-cargar-menos {
     position: absolute;
@@ -990,6 +952,20 @@ margin-top:18%;
     background: #333;
     color: white;
     border-radius: 50%;
-    margin-top: -4%;
+    margin-top: 23%;
     margin-left:-9%;
+}
+.contenedor-imagenes img {
+    object-fit: contain;
+}
+
+.contenedor-imagenes img:hover {
+    
+   
+}.contenedor-imagenes img.zoomed {
+    transform: scale(2.3);
+    transition: transform 0.3s ease;
+    position: relative;
+    z-index: 999;
+    cursor: zoom-out; /* Opcional, para indicar que está ampliada */
 }
