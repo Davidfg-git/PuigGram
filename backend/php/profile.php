@@ -39,7 +39,30 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute(['id_sesion' => $id]);
 $sugerencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Número de seguidores
+$sqlSeguidores = "SELECT COUNT(*) AS total_seguidores FROM seguidores WHERE id_seguido = :id";
+$stmtSeguidores = $pdo->prepare($sqlSeguidores);
+$stmtSeguidores->execute(['id' => $id]);
+$nseguidores = $stmtSeguidores->fetchColumn();
 
+// Número de seguidos
+$sqlSeguidos = "SELECT COUNT(*) AS total_seguidos FROM seguidores WHERE id_usuario = :id";
+$stmtSeguidos = $pdo->prepare($sqlSeguidos);
+$stmtSeguidos->execute(['id' => $id]);
+$nseguidos = $stmtSeguidos->fetchColumn();
+
+
+// Número de publicaciones
+$sql = "SELECT COUNT(*) AS total FROM publicaciones WHERE id_usuario = :id";
+$stmt = $pdo->prepare($sql);
+$stmt->execute(['id' => $id]);
+$npublicaciones = $stmt->fetchColumn();
+
+// Obtener todas las imágenes del usuario ordenadas (ajusta el nombre de tabla y campo si es diferente)
+$sqlImgs = "SELECT contenido FROM publicaciones WHERE id_usuario = :id AND tipo = 'imagen' AND contenido IS NOT NULL ORDER BY id_publicacion DESC";
+$stmtImgs = $pdo->prepare($sqlImgs);
+$stmtImgs->execute(['id' => $id]);
+$imagenesPerfil = $stmtImgs->fetchAll(PDO::FETCH_COLUMN);
 
 
 ?>
@@ -55,6 +78,10 @@ $sugerencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <link rel="stylesheet" href="../../public/assets/styles/mainStyle.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+</style>
+
 </head>
 <body>
 
@@ -246,8 +273,80 @@ window.onclick = function(event) {
 <div id="modalPerfil" class="modal">
   <div class="modal-contenido">
     <span class="cerrar" onclick="cerrarModal()">&times;</span>
-    <p>Este es tu perfil flotante.</p>
+    <div class="infoPerfil">
+    <img class="imgPerfilPrev2" id="perfilImagen" src="<?= $imagenPerfil . '?v=' . time(); ?>" alt="Profile Picture">
+    <p class="nombreUsuarioPopUp"><?php echo $username?></p>
+    <div class="info">
+    <p class="nSeguidores"><?php echo $nseguidores ?> seguidores</p>
+    <p class="nSeguidos"><?php echo $nseguidos ?> seguidos</p>
+    <p class="nPublicaciones"><?php echo $npublicaciones ?> Publicaciones</p>
+    </div>
+
+    <div class="galeriaImagenes">
+    <button id="btn-cargar-menos" class="btn-cargar-menos" style="display:none;">⮜</button>
+
+    <div id="contenedor-imagenes-modal" style="display:flex; gap:10px;">
+        <!-- Aquí se cargarán las imágenes dinámicamente -->
+    </div>
+
+    <button id="btn-cargar-mas" class="btn-cargar-mas" style="display:none;">⮞</button>
+</div>
+
+    </div>
+    
   </div>
 </div>
+
+<script>
+  const imagenesPerfil = <?= json_encode($imagenesPerfil) ?>;
+  const contenedorImagenes = document.getElementById('contenedor-imagenes-modal');
+  const btnCargarMas = document.getElementById('btn-cargar-mas');
+  const btnCargarMenos = document.getElementById('btn-cargar-menos');
+
+  let indiceInicio = 0;
+  const IMAGENES_POR_CARGAR = 6;
+
+  function cargarImagenes() {
+    contenedorImagenes.innerHTML = '';
+
+    const indiceFin = Math.min(indiceInicio + IMAGENES_POR_CARGAR, imagenesPerfil.length);
+
+    for (let i = indiceInicio; i < indiceFin; i++) {
+      const divContenedor = document.createElement('div');
+      divContenedor.classList.add('contenedor-imagen');
+
+      const figure = document.createElement('figure');
+      const img = document.createElement('img');
+      img.classList.add('imgPerfil');
+      img.src = '../../'+imagenesPerfil[i];
+      img.alt = 'Imagen perfil usuario';
+
+      figure.appendChild(img);
+      divContenedor.appendChild(figure);
+      contenedorImagenes.appendChild(divContenedor);
+    }
+
+    // Mostrar/ocultar botones según índice y cantidad de imágenes
+    btnCargarMenos.style.display = indiceInicio > 0 ? 'inline-block' : 'none';
+    btnCargarMas.style.display = indiceFin < imagenesPerfil.length ? 'inline-block' : 'none';
+  }
+
+  btnCargarMas.addEventListener('click', () => {
+    if (indiceInicio + IMAGENES_POR_CARGAR < imagenesPerfil.length) {
+      indiceInicio += IMAGENES_POR_CARGAR;
+      cargarImagenes();
+    }
+  });
+
+  btnCargarMenos.addEventListener('click', () => {
+    if (indiceInicio - IMAGENES_POR_CARGAR >= 0) {
+      indiceInicio -= IMAGENES_POR_CARGAR;
+      cargarImagenes();
+    }
+  });
+
+  // Carga inicial
+  cargarImagenes();
+</script>
 </body>
 </html>
