@@ -21,6 +21,7 @@ $nombre = $user['nombre_completo'];
 $username = $user['nombre_usuario'];
 $descripcion = $user['descripcion'];
 $imagenPerfil = $user['imagen_perfil'];
+$tipo = $user['cuenta_publica'];
 if (empty($imagenPerfil)) {
     $imagenPerfil = null;
 }
@@ -47,6 +48,7 @@ while (count($sugerencias) < 3) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -58,17 +60,18 @@ while (count($sugerencias) < 3) {
 
 
 </head>
+
 <body>
     <div class="sidebar">
         <h1>PuigGram</h1>
         <ul>
             <li><a href="mainPage.php"><i class="bi bi-house"></i> Inicio</a></li>
-        <li><a href="explore.php"><i class="bi bi-search"></i>Explorar</a></li>
-        <li hidden><a href="messages.php" hidden><i class="bi bi-chat"></i>Mensajes</a></li>
-        <li hidden><a href="notifications.php" hidden><i class="bi bi-bell"></i>Notificaciones</a></li>
-        <li><a href="publish.php"><i class="bi bi-plus-square"></i>Publicar</a></li>
-        <li><a href="profile.php"><i class="bi bi-person"></i>Perfil</a></li>
-        <li><a href="settings.php"><i class="bi bi-gear"></i>Configuración</a></li>
+            <li><a href="explore.php"><i class="bi bi-search"></i>Explorar</a></li>
+            <li hidden><a href="messages.php" hidden><i class="bi bi-chat"></i>Mensajes</a></li>
+            <li hidden><a href="notifications.php" hidden><i class="bi bi-bell"></i>Notificaciones</a></li>
+            <li><a href="publish.php"><i class="bi bi-plus-square"></i>Publicar</a></li>
+            <li><a href="profile.php"><i class="bi bi-person"></i>Perfil</a></li>
+            <li><a href="settings.php"><i class="bi bi-gear"></i>Configuración</a></li>
         </ul>
     </div>
 
@@ -80,86 +83,102 @@ while (count($sugerencias) < 3) {
         </div>
     </div>
     <div class="contenido" style="justify-content: center;">
-        
-       <form action="" class="formularioConfiguracion">
-        <label for=""  class="formularioCambio" style="position: absolute;">Privacidad</label> 
-        
-       
-        <section class="bordes"> 
-            <label class="switch">
-           <span class="selectA">Público</span>
-            <input type="checkbox">
-            
-            <span class="slider"></span>
-            <span class="selectB">Privado</span>
-        </label>
-        </section>
-   
-        <section class="bordes"><label class="formularioCambio" for="cambiarContraseña"><a class="enlacesConfiguracion" href="newPassword.php">Cambiar Contraseña</a></label><br>
-        </section>
 
-            <section class="bordes"><label  class="formularioCambio" for=""><a class="enlacesConfiguracion" href="logout.php">Cerrar Sesión</a></label><br>
-            
+        <form action="" class="formularioConfiguracion">
+            <label for="" class="formularioCambio" style="position: absolute;">Privacidad</label>
 
-                <label  class="formularioCambio" for=""><a class="enlacesConfiguracion" href="usuariosDAO.php">Eliminar Cuenta</label><br>
-                </section>
-       </form>
+
+            <section class="bordes">
+                <label class="switch">
+                    <span class="selectA">Público</span>
+                    <input type="checkbox" id="switchCuenta" <?php if ($tipo == 1)
+                        echo 'checked'; ?>>
+                    <span class="slider"></span>
+                    <span class="selectB">Privado</span>
+                </label>
+
+            </section>
+
+            <section class="bordes"><label class="formularioCambio" for="cambiarContraseña"><a
+                        class="enlacesConfiguracion" href="newPassword.php">Cambiar Contraseña</a></label><br>
+            </section>
+
+            <section class="bordes"><label class="formularioCambio" for=""><a class="enlacesConfiguracion"
+                        href="logout.php">Cerrar Sesión</a></label><br>
+
+
+                <label class="formularioCambio" for=""><a class="enlacesConfiguracion" href="usuariosDAO.php">Eliminar
+                        Cuenta</label><br>
+            </section>
+        </form>
     </div>
-   <div class="suggestions">
-    <h2>Sugerencias</h2>
-    <ul>
-    <?php foreach ($sugerencias as $sugerencia): ?>
-        <li>
-            <img src="<?= !empty($sugerencia['imagen_perfil']) ? $sugerencia['imagen_perfil'] : '../../public/assets/default/default-image.jpg' ?>" alt="">
-            <?= htmlspecialchars($sugerencia['nombre_usuario']) ?>
-            <button 
-    class="follow-btn <?= $sugerencia['ya_sigue'] ? 'following' : '' ?>" 
-    data-id="<?= $sugerencia['id_usuario'] ?>"
-    <?= $sugerencia['ya_sigue'] ? 'disabled' : '' ?>>
-    <?= $sugerencia['ya_sigue'] ? 'Siguiendo' : 'Seguir' ?>
-</button>
+    <div class="suggestions">
+        <h2>Sugerencias</h2>
+        <ul>
+            <?php foreach ($sugerencias as $sugerencia): ?>
+                <li>
+                    <img src="<?= !empty($sugerencia['imagen_perfil']) ? $sugerencia['imagen_perfil'] : '../../public/assets/default/default-image.jpg' ?>"
+                        alt="">
+                    <?= htmlspecialchars($sugerencia['nombre_usuario']) ?>
+                    <button class="follow-btn <?= $sugerencia['ya_sigue'] ? 'following' : '' ?>"
+                        data-id="<?= $sugerencia['id_usuario'] ?>" <?= $sugerencia['ya_sigue'] ? 'disabled' : '' ?>>
+                        <?= $sugerencia['ya_sigue'] ? 'Siguiendo' : 'Seguir' ?>
+                    </button>
 
-        </li>
-    <?php endforeach; ?>
-    </ul>
-</div>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    const botonesSeguir = document.querySelectorAll(".follow-btn");
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const botonesSeguir = document.querySelectorAll(".follow-btn");
 
-    botonesSeguir.forEach(button => {
-        // Si ya está siguiendo (deshabilitado o con clase 'following'), no añadas listener
-        if (button.classList.contains("following") || button.disabled) {
-            return;
-        }
-
-        button.addEventListener("click", () => {
-            const id_seguido = button.getAttribute("data-id");
-
-            fetch("../../backend/php/seguir_usuario.php", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                body: "id_seguido=" + encodeURIComponent(id_seguido)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === "success") {
-                    button.textContent = "Siguiendo";
-                    button.disabled = true;
-                    button.classList.add("following");
-                } else {
-                    alert(data.message);
+            botonesSeguir.forEach(button => {
+                // Si ya está siguiendo (deshabilitado o con clase 'following'), no añadas listener
+                if (button.classList.contains("following") || button.disabled) {
+                    return;
                 }
-            })
-            .catch(error => {
-                console.error("Error:", error);
+
+                button.addEventListener("click", () => {
+                    const id_seguido = button.getAttribute("data-id");
+
+                    fetch("../../backend/php/seguir_usuario.php", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: "id_seguido=" + encodeURIComponent(id_seguido)
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === "success") {
+                                button.textContent = "Siguiendo";
+                                button.disabled = true;
+                                button.classList.add("following");
+                            } else {
+                                alert(data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                        });
+                });
             });
         });
-    });
-});
-</script>
-    
+
+        const switchCuenta = document.getElementById('switchCuenta');
+
+        switchCuenta.addEventListener('change', () => {
+            if (switchCuenta.checked) {
+                console.log("Cuenta Pública");
+                // aquí puedes hacer lo que quieras si se activa
+            } else {
+                console.log("Cuenta Privada");
+                // aquí lo que quieras si se desactiva
+            }
+        });
+    </script>
+
 </body>
+
 </html>

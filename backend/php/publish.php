@@ -143,7 +143,7 @@ $sugerencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
       reader.onload = (event) => {
         previewArea.innerHTML = `
           <img src="${event.target.result}" alt="Previsualización" class="preview-img">
-          <textarea id="descripcion-textarea" maxlength="100" placeholder="Escribe una descripción (100 carácteres permitidos)"></textarea>
+          <textarea id="descripcion-textarea" maxlength="43" placeholder="Escribe una descripción (43 carácteres permitidos)"></textarea>
         `;
         previewArea.classList.add("mostrar-preview");
       };
