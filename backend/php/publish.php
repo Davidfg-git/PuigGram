@@ -36,7 +36,6 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute(['id_sesion' => $id]);
 $sugerencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
 ?>
 
 
@@ -133,6 +132,41 @@ $sugerencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </div>
   <script>
+     document.addEventListener("DOMContentLoaded", () => {
+            const botonesSeguir = document.querySelectorAll(".follow-btn");
+
+            botonesSeguir.forEach(button => {
+                // Si ya está siguiendo (deshabilitado o con clase 'following'), no añadas listener
+                if (button.classList.contains("following") || button.disabled) {
+                    return;
+                }
+
+                button.addEventListener("click", () => {
+                    const id_seguido = button.getAttribute("data-id");
+
+                    fetch("../../backend/php/seguir_usuario.php", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: "id_seguido=" + encodeURIComponent(id_seguido)
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === "success") {
+                                button.textContent = "Siguiendo";
+                                button.disabled = true;
+                                button.classList.add("following");
+                            } else {
+                                alert(data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                        });
+                });
+            });
+        });
     document.addEventListener("DOMContentLoaded", () => {
       const fileInput = document.getElementById("file-upload");
       const previewArea = document.getElementById("preview");
@@ -185,41 +219,7 @@ $sugerencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
       });
     });
     element.style.removeProperty('justify-content');
-    document.addEventListener("DOMContentLoaded", () => {
-      const botonesSeguir = document.querySelectorAll(".follow-btn");
-
-      botonesSeguir.forEach(button => {
-        // Si ya está siguiendo (deshabilitado o con clase 'following'), no añadas listener
-        if (button.classList.contains("following") || button.disabled) {
-          return;
-        }
-
-        button.addEventListener("click", () => {
-          const id_seguido = button.getAttribute("data-id");
-
-          fetch("../../backend/php/seguir_usuario.php", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: "id_seguido=" + encodeURIComponent(id_seguido)
-          })
-            .then(response => response.json())
-            .then(data => {
-              if (data.status === "success") {
-                button.textContent = "Siguiendo";
-                button.disabled = true;
-                button.classList.add("following");
-              } else {
-                alert(data.message);
-              }
-            })
-            .catch(error => {
-              console.error("Error:", error);
-            });
-        });
-      });
-    });
+    
   </script>
 </body>
 

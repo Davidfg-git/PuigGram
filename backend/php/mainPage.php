@@ -19,7 +19,7 @@ $username = $user['nombre_usuario'];
 $descripcion = $user['descripcion'];
 $imagenPerfil = $user['imagen_perfil'] ?: null;
 
-//sugerencias
+// Ejemplo de consulta para obtener sugerencias (ajusta según tu lógica y estructura de base de datos)
 $sql = "
     SELECT u.id_usuario, u.nombre_usuario, u.imagen_perfil, 
            CASE WHEN s.id_usuario IS NOT NULL THEN 1 ELSE 0 END AS ya_sigue
@@ -32,6 +32,7 @@ $sql = "
 $stmt = $pdo->prepare($sql);
 $stmt->execute(['id_sesion' => $id]);
 $sugerencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 ?>
 <!DOCTYPE html>
@@ -86,46 +87,56 @@ $sugerencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <div class="suggestions">
-    <h2>Sugerencias</h2>
-    <ul>
-    <?php foreach ($sugerencias as $sugerencia): ?>
-        <li>
-            <img src="<?= !empty($sugerencia['imagen_perfil']) ? $sugerencia['imagen_perfil'] : '../../public/assets/default/default-image.jpg' ?>" alt="">
-            <?= htmlspecialchars($sugerencia['nombre_usuario']) ?>
-            <button 
-    class="follow-btn <?= $sugerencia['ya_sigue'] ? 'following' : '' ?>" 
-    data-id="<?= $sugerencia['id_usuario'] ?>"
-    <?= $sugerencia['ya_sigue'] ? 'disabled' : '' ?>>
-    <?= $sugerencia['ya_sigue'] ? 'Siguiendo' : 'Seguir' ?>
-</button>
+        <h2>Sugerencias</h2>
+        <ul>
+            <?php foreach ($sugerencias as $sugerencia): ?>
+                <li>
+                    <img src="<?= !empty($sugerencia['imagen_perfil']) ? $sugerencia['imagen_perfil'] : '../../public/assets/default/default-image.jpg' ?>"
+                        alt="">
+                    <?= htmlspecialchars($sugerencia['nombre_usuario']) ?>
+                    <button class="follow-btn <?= $sugerencia['ya_sigue'] ? 'following' : '' ?>"
+                        data-id="<?= $sugerencia['id_usuario'] ?>" <?= $sugerencia['ya_sigue'] ? 'disabled' : '' ?>>
+                        <?= $sugerencia['ya_sigue'] ? 'Siguiendo' : 'Seguir' ?>
+                    </button>
 
-        </li>
-    <?php endforeach; ?>
-    </ul>
-</div>
-
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
     <script>
+       
         document.addEventListener("DOMContentLoaded", () => {
-            // Seguir usuarios
-            document.querySelectorAll(".follow-btn").forEach(button => {
+            const botonesSeguir = document.querySelectorAll(".follow-btn");
+
+            botonesSeguir.forEach(button => {
+                // Si ya está siguiendo (deshabilitado o con clase 'following'), no añadas listener
+                if (button.classList.contains("following") || button.disabled) {
+                    return;
+                }
+
                 button.addEventListener("click", () => {
                     const id_seguido = button.getAttribute("data-id");
+
                     fetch("../../backend/php/seguir_usuario.php", {
                         method: "POST",
-                        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
                         body: "id_seguido=" + encodeURIComponent(id_seguido)
                     })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === "success") {
-                            button.textContent = "Siguiendo";
-                            button.disabled = true;
-                            button.classList.add("following");
-                        } else {
-                            alert(data.message);
-                        }
-                    })
-                    .catch(error => console.error("Error:", error));
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === "success") {
+                                button.textContent = "Siguiendo";
+                                button.disabled = true;
+                                button.classList.add("following");
+                            } else {
+                                alert(data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                        });
                 });
             });
         });
@@ -174,41 +185,7 @@ $sugerencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
         // Cargar primera publicación al inicio
         cargarPublicacion(0);
 
-        document.addEventListener("DOMContentLoaded", () => {
-    const botonesSeguir = document.querySelectorAll(".follow-btn");
-
-    botonesSeguir.forEach(button => {
-        // Si ya está siguiendo (deshabilitado o con clase 'following'), no añadas listener
-        if (button.classList.contains("following") || button.disabled) {
-            return;
-        }
-
-        button.addEventListener("click", () => {
-            const id_seguido = button.getAttribute("data-id");
-
-            fetch("../../backend/php/seguir_usuario.php", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                body: "id_seguido=" + encodeURIComponent(id_seguido)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === "success") {
-                    button.textContent = "Siguiendo";
-                    button.disabled = true;
-                    button.classList.add("following");
-                } else {
-                    alert(data.message);
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-            });
-        });
-    });
-});
+        
     </script>
 </body>
 </html>
