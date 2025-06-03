@@ -58,7 +58,7 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute(['id' => $id]);
 $npublicaciones = $stmt->fetchColumn();
 
-// Obtener todas las imágenes del usuario ordenadas (ajusta el nombre de tabla y campo si es diferente)
+// Obtener todas las imágenes del usuario ordenadas
 $sqlImgs = "SELECT contenido FROM publicaciones WHERE id_usuario = :id AND tipo = 'imagen' AND contenido IS NOT NULL ORDER BY id_publicacion DESC";
 $stmtImgs = $pdo->prepare($sqlImgs);
 $stmtImgs->execute(['id' => $id]);
@@ -140,17 +140,17 @@ $descripcionesPublicaciones = $stmtDescripciones->fetchAll(PDO::FETCH_COLUMN);
 
             <section class="seccionesPerfil">
                 <label class="formularioCambioPerfil">Nombre</label>
-                <input type="text" class="nombre" value="<?= $nombre ?>" id="nombre" name="nombre">
+                <input type="text" class="nombre" maxlength="14"  value="<?= $nombre ?>" id="nombre" name="nombre">
             </section>
 
             <section class="seccionesPerfil">
                 <label class="formularioCambioPerfil">Nombre de usuario</label>
-                <input type="text" class="nombre" id="userName" name="userName" value="<?= $username ?>">
+                <input type="text" class="nombre" id="userName" maxlength="14" name="userName" value="<?= $username ?>">
             </section>
 
             <section class="seccionesPerfil">
                 <label class="formularioCambioPerfil">Presentación</label>
-                <input type="text" class="nombre" id="presentacion" name="presentacion" max="300"
+                <input type="text" class="nombre" id="presentacion" name="presentacion" maxlength="20"
                     value="<?= $descripcion ?>">
             </section>
 

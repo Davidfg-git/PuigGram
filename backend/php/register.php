@@ -85,11 +85,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
                 <div class="mb-3">
                     <label for="name" class="form-label">Nombre</label>
-                    <input type="name" id="name" class="form-control" name="name" placeholder="Escribe tu nombre">
+                    <input type="name" id="name" class="form-control" maxlength="14" name="name" placeholder="Escribe tu nombre">
                 </div>
                 <div class="mb-3">
                     <label for="username" class="form-label">Nombre de Usuario</label>
-                    <input type="username" id="username" class="form-control"  name="username" placeholder="Escribe tu nombre">
+                    <input type="username" id="username" class="form-control" maxlength="14" name="username" placeholder="Escribe tu nombre">
                 </div>
                 <div class="d-flex">
                     <a href="/index.html" class="text-decoration-none">¿Ya estás registrad@?</a>

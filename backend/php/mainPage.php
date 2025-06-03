@@ -75,7 +75,7 @@ $sugerencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="post-carousel">
             <button id="prev-post" class="nav-btn" disabled>&#8249;</button>
             <div class="post-view">
-                <!-- Aquí se cargará la publicación actual -->
+                <!-- Carga de publicaciones -->
             </div>
             <button id="next-post" class="nav-btn">&#8250;</button>
         </div>

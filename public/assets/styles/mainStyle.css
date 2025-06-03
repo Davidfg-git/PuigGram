@@ -676,6 +676,12 @@ input:checked + .slider:before {
     background-color: #ffffff;
     border: #f8f8f8;
 }
+
+#botonBuscar{
+    font-size: 20px;
+}
+
+
 .follow-btn.following {
     background-color: #ccc;
     color: #666;

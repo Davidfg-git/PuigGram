@@ -108,7 +108,7 @@ $sugerencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
                 <label class="formularioCambio" for=""><a class="enlacesConfiguracion" href="usuariosDAO.php">Eliminar
-                        Cuenta</label><br>
+                        Cuenta</a></label><br>
             </section>
         </form>
     </div>
