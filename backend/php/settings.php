@@ -42,9 +42,9 @@ $sugerencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 // Si hay menos de 3 sugerencias, rellena con valores vacíos para evitar errores
-while (count($sugerencias) < 3) {
+/*while (count($sugerencias) < 3) {
     $sugerencias[] = ['nombre_usuario' => 'Usuario', 'src' => null];
-}
+}*/
 ?>
 <!DOCTYPE html>
 <html lang="en">
