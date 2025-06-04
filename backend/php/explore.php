@@ -130,8 +130,9 @@ width: 220px;
 }
 
 .nombreUsuarioPopUp{
-
-
+    color: black;
+font-size: 30px;
+margin-left: 120px;
 }
 
 .nombreCompletoPopUp{
@@ -142,7 +143,9 @@ display: none;
 
 .descripcionPopUp{
 
+margin-left: 120px;
 
+margin-top: 100px;
 }
 
 .contenedor-imagenes :nth-child(1) {
@@ -150,8 +153,26 @@ display: none;
 margin-top: 35%;
   margin-left: -40%;
 }
+#seguidos {
+    
+margin-left: 20%;
+}
+#seguidores{
+margin-left: 20%;
+}
+.dores{
+margin-left: 17%;
+    color: black;
+font-size: 20px;
+}
 
+.idos{ 
+    position: absolute;
+    font-size: 20px;
+margin-left: 20%;
+    color: black;
 
+}
     </style>
 </head>
 <body>
@@ -274,6 +295,8 @@ function mostrarModalUsuario(idUsuario) {
             document.querySelector('.nombreUsuarioPopUp').textContent = usuario.nombre_usuario;
             document.querySelector('.nombreCompletoPopUp').textContent = usuario.nombre_completo || '';
             document.querySelector('.descripcionPopUp').textContent = usuario.descripcion || '';
+            document.getElementById('seguidores').textContent = usuario.num_seguidores ?? '0';
+            document.getElementById('seguidos').textContent = usuario.num_seguidos ?? '0';
 
             // Guardar imágenes y descripciones en variables temporales
             imagenesUsuarioActual = usuario.imagenes ? usuario.imagenes.map(img => img.contenido) : [];
@@ -390,19 +413,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 modal.style.display = "none";
             }
         }
-$.ajax({
-    url: '../../php/get_usuario.php?id=' + id_usuario,
-    type: 'GET',
-    dataType: 'json',
-    success: function(data) {
-        if (!data.error) {
-            $('#modalNombre').text(data.usuario);
-            $('#seguidores').text(data.num_seguidores);
-            $('#seguidos').text(data.num_seguidos);
-            // Y lo que quieras más...
-        }
-    }
-});
 
 </script>
 
@@ -414,14 +424,16 @@ $.ajax({
             <img class="imgPerfilPrev2" id="perfilImagen" src="" alt="Profile Picture">
             <p class="nombreUsuarioPopUp"></p>
             <p class="nombreCompletoPopUp"></p>
-            <p class="descripcionPopUp"></p>
+            <p class="descripcionPopUp"></p> 
+            <p class="dores">Seguidores:
+            </p>
+            <p> <span id="seguidores"></span></p>
+            <p class="idos">Seguidos:</p>
+            <p> <span id="seguidos"></span></p>
             <button id="btn-cargar-menos" class="btn-cargar-menos" style="display:none;">⮜</button>
             <div id="contenedor-imagenes-modal"></div>
             <button id="btn-cargar-mas" class="btn-cargar-mas" style="display:none;">⮞</button>
-            <div class="seguidores-info">
-            <p>Seguidores: <span id="seguidores"></span></p>
-            <p>Seguidos: <span id="seguidos"></span></p>
-            </div>
+            
         </div>
     </div>
 </div>
@@ -521,6 +533,23 @@ $.ajax({
                 localStorage.removeItem('abrirModalPerfil');
             }
         });
+$.ajax({
+    url: '../../php/get_usuario.php?id=' + id_usuario,
+    type: 'GET',
+    dataType: 'json',
+    success: function(data) {
+        if (!data.error) {
+            $('#modalNombre').text(data.usuario);
+            $('#seguidores').text(data.num_seguidores);
+            $('#seguidos').text(data.num_seguidos);
+            // Y lo que quieras más...
+        }
+    }
+});
+
+        document.getElementById('numSeguidores').textContent = totalSeguidores + ' Seguidores';
+        document.getElementById('numSeguidos').textContent = totalSeguidos + ' Siguiendo';
+
 
     </script>
 
