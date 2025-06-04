@@ -105,11 +105,16 @@ $descripcionesPublicaciones = $stmtDescripciones->fetchAll(PDO::FETCH_COLUMN);
     <style>
         #contenedor-imagenes-modal {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 columnas */
     gap: 8px; /* Espacio entre imágenes, ajústalo a tu gusto */
     margin-top: 20px;
+    grid-template-columns: repeat(3, 1fr); 
+    
 }
+.btn-ver-descripcion{
 
+ margin-left: -30%;
+
+}
 .contenedor-imagenes {
     display: flex;
     flex-direction: column;
@@ -117,25 +122,35 @@ $descripcionesPublicaciones = $stmtDescripciones->fetchAll(PDO::FETCH_COLUMN);
     padding: 0;
     margin: 0;
 }
+.imgPerfilPrev2{
+width: 220px;
+    height: 220px;
+ margin-left: -9%;
 
-.contenedor-imagenes img.imgPerfil {
-    width: 100%;
-    max-width: 110px; /* Ajusta el tamaño máximo de la imagen */
-    height: auto;
-    border-radius: 8px;
-    object-fit: cover;
-    margin-bottom: 4px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
 
-.btn-ver-descripcion {
-    margin-top: 2px;
-    font-size: 1.1em;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #333;
+.nombreUsuarioPopUp{
+
+
 }
+
+.nombreCompletoPopUp{
+
+
+display: none;
+}
+
+.descripcionPopUp{
+
+
+}
+
+.contenedor-imagenes :nth-child(1) {
+  /* Estilos para el primer hijo */
+margin-top: 35%;
+  margin-left: -40%;
+}
+
 
     </style>
 </head>
@@ -187,6 +202,7 @@ echo '<button class="verPerfil" type="button" onclick="mostrarModalUsuario(' . $
                     <img src="<?= !empty($sugerencia['imagen_perfil']) ? $sugerencia['imagen_perfil'] : '../../public/assets/default/default-image.jpg' ?>"
                         alt="">
                     <?= htmlspecialchars($sugerencia['nombre_usuario']) ?>
+            <!--    -->
                     <button class="follow-btn <?= $sugerencia['ya_sigue'] ? 'following' : '' ?>"
                         data-id="<?= $sugerencia['id_usuario'] ?>" <?= $sugerencia['ya_sigue'] ? 'disabled' : '' ?>>
                         <?= $sugerencia['ya_sigue'] ? 'Siguiendo' : 'Seguir' ?>
@@ -284,6 +300,8 @@ function paginarImagenesUsuarioActual() {
 
         const figure = document.createElement('figure');
         const img = document.createElement('img');
+        img.classList.add('imgPerfil', `img-${i % 6}`); // Clase única por imagen
+
         img.classList.add('imgPerfil');
         img.src = '../../' + imagenesUsuarioActual[i];
         img.alt = 'Imagen perfil usuario';
@@ -372,6 +390,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 modal.style.display = "none";
             }
         }
+$.ajax({
+    url: '../../php/get_usuario.php?id=' + id_usuario,
+    type: 'GET',
+    dataType: 'json',
+    success: function(data) {
+        if (!data.error) {
+            $('#modalNombre').text(data.usuario);
+            $('#seguidores').text(data.num_seguidores);
+            $('#seguidos').text(data.num_seguidos);
+            // Y lo que quieras más...
+        }
+    }
+});
 
 </script>
 
@@ -387,7 +418,10 @@ document.addEventListener("DOMContentLoaded", () => {
             <button id="btn-cargar-menos" class="btn-cargar-menos" style="display:none;">⮜</button>
             <div id="contenedor-imagenes-modal"></div>
             <button id="btn-cargar-mas" class="btn-cargar-mas" style="display:none;">⮞</button>
-
+            <div class="seguidores-info">
+            <p>Seguidores: <span id="seguidores"></span></p>
+            <p>Seguidos: <span id="seguidos"></span></p>
+            </div>
         </div>
     </div>
 </div>
@@ -487,7 +521,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 localStorage.removeItem('abrirModalPerfil');
             }
         });
-
 
     </script>
 
