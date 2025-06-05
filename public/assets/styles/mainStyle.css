@@ -688,7 +688,13 @@ input:checked + .slider:before {
 .follow-btn.following {
   background-color: #ccc;
   color: #666;
-  cursor: not-allowed;
+  margin-left: auto;
+    padding: 5px 10px;
+    background-color: #5f9699de;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 .media-box {
@@ -1034,6 +1040,7 @@ input:checked + .slider:before {
   color: #fff;
   cursor: pointer;
 }
+
 .descripcionPerfilPropio{
     margin-top: -15px;
     position: absolute;
@@ -1041,31 +1048,30 @@ font-size: 15px;
 color: #302e2e;
 width: 300px;
 }
-/*
-.img-0, .img-1, .img-2{
+
+.btn-ver-imagen{
     
+    position: absolute;
+    z-index: 999;
+    font-size: 30px;
+   
 }
 
 
-.img-0{
-
+.btn-ver-imagen {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0.5rem;
+    background: none;
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-.img-1{
-
+.btn-ver-imagen i {
+    font-size: 1.5rem;
+    pointer-events: none; /* <- clave para que no interfiera con el click del botón */
 }
-
-.img-2{
-
-}
-
-.img-3{
-
-}
-
-.img-4{
-
-}
-.img-5{
-
-}*/

@@ -116,7 +116,7 @@ $descripcionesPublicaciones = $stmtDescripciones->fetchAll(PDO::FETCH_COLUMN);
 }
 .btn-ver-descripcion{
 
- margin-left: -30%;
+ margin-left: -92%;
 
 }
 .contenedor-imagenes {
@@ -147,7 +147,7 @@ margin-left: 130px;
 
 
 .descripcionPopUp{
-
+font-style: italic;
 margin-left: 134px;
 
 margin-top: 130px;
@@ -201,10 +201,25 @@ margin-left: 11%;
 
 }
 #btn-seguir-modal {
+    position: absolute;
+    font-size: 30px;
     transform: scale(1.5);
-    display: block;
-    margin: 20px auto;
-}
+    margin-left: 45%;
+
+      background-color: #ccc;
+  color: #666;
+
+    padding: 5px 10px;
+    background-color: #007b80;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100px;
+    height: 40px;
+    margin-top: -17px;
+}   
+
     </style>
 </head>
 <body>
@@ -330,17 +345,98 @@ function mostrarModalUsuario(idUsuario) {
             document.getElementById('seguidores').textContent = usuario.num_seguidores ?? '0';
             document.getElementById('seguidos').textContent = usuario.num_seguidos ?? '0';
 
-            // Guardar imágenes y descripciones en variables temporales
+            // Imágenes y descripciones...
             imagenesUsuarioActual = usuario.imagenes ? usuario.imagenes.map(img => img.contenido) : [];
             descripcionesUsuarioActual = usuario.imagenes ? usuario.imagenes.map(img => img.descripcion) : [];
             indiceInicioUsuarioActual = 0;
-
             paginarImagenesUsuarioActual();
 
-            document.getElementById('modalPerfil').style.display = 'block';
-        });
+          // -- BOTÓN SEGUIR / DEJAR DE SEGUIR --
+const btnSeguir = document.getElementById('btn-seguir-modal');
+btnSeguir.setAttribute('data-id', usuario.id_usuario);
+// Quitar listeners previos para evitar duplicados
+btnSeguir.replaceWith(btnSeguir.cloneNode(true));
+const btnSeguirNuevo = document.getElementById('btn-seguir-modal');
+
+if (usuario.ya_sigue) {
+    btnSeguirNuevo.innerHTML = '<i class="bi bi-person-dash"></i>';
+    btnSeguirNuevo.style.color = '#870f0f';
+    btnSeguirNuevo.disabled = false;
+    btnSeguirNuevo.classList.add('following');
+    btnSeguirNuevo.onclick = function() {
+        dejarDeSeguir(usuario.id_usuario);
+    };
+} else {
+    btnSeguirNuevo.innerHTML = '<i class="bi bi-person-add"></i>';
+    btnSeguirNuevo.style.color = 'white';
+    btnSeguirNuevo.disabled = false;
+    btnSeguirNuevo.classList.remove('following');
+    btnSeguirNuevo.onclick = function() {
+        seguirUsuario(usuario.id_usuario);
+    };
 }
 
+            // Mostrar modal
+            document.getElementById('modalPerfil').style.display = 'block';
+        });
+        function dejarDeSeguir(id_seguido) {
+    fetch('../../backend/php/dejas_de_seguir.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'id_seguido=' + encodeURIComponent(id_seguido)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+            const btnSeguir = document.getElementById('btn-seguir-modal');
+            btnSeguir.innerHTML = '<i class="bi bi-person-add"></i>';
+            btnSeguir.style.color = 'white';
+            btnSeguir.disabled = false;
+            btnSeguir.classList.remove('following');
+            // Actualiza el contador de seguidores
+            const seguidoresElem = document.getElementById('seguidores');
+            seguidoresElem.textContent = Math.max(0, parseInt(seguidoresElem.textContent) - 1);
+            // Cambia el evento para volver a seguir
+            btnSeguir.onclick = function() {
+                seguirUsuario(id_seguido);
+            };
+        } else {
+            alert(data.message || "No se pudo dejar de seguir.");
+        }
+    });
+}
+
+function seguirUsuario(id_seguido) {
+    fetch('../../backend/php/seguir_usuario.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'id_seguido=' + encodeURIComponent(id_seguido)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+            const btnSeguir = document.getElementById('btn-seguir-modal');
+            btnSeguir.innerHTML = '<i class="bi bi-person-dash"></i>';
+            btnSeguir.style.color = '#870f0f';
+            btnSeguir.disabled = false;
+            btnSeguir.classList.add('following');
+            // Actualiza el contador de seguidores
+            const seguidoresElem = document.getElementById('seguidores');
+            seguidoresElem.textContent = parseInt(seguidoresElem.textContent) + 1;
+            // Cambia el evento para dejar de seguir
+            btnSeguir.onclick = function() {
+                dejarDeSeguir(id_seguido);
+            };
+        } else {
+            alert(data.message || "No se pudo seguir.");
+        }
+    });
+}
+}
 function paginarImagenesUsuarioActual() {
     const contenedor = document.getElementById('contenedor-imagenes-modal');
     contenedor.innerHTML = '';
@@ -462,7 +558,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <p> <span id="seguidores"></span></p>
             <p class="idos">seguidos</p>
             <p> <span id="seguidos"></span></p>
-            <button id="btn-seguir-modal" class="follow-btn" style="transform: scale(1.5); margin-top: 20px;" data-id="">Seguir</button>
+            <button id="btn-seguir-modal" class="follow-btn" style="transform: scale(1.5); " data-id=""></button>
 
             <button id="btn-cargar-menos" class="btn-cargar-menos" style="display:none;">⮜</button>
             <div id="contenedor-imagenes-modal"></div>

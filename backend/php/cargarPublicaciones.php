@@ -31,16 +31,16 @@ foreach ($posts as $post) {
     $descripcion = nl2br(htmlspecialchars($post['descripcion']));
     $usuario = htmlspecialchars($post['nombre_usuario']);
     $perfil = $post['imagen_perfil'] ?: '../../public/assets/default/default-image.jpg';
-
-    echo <<<HTML
-    <div class="publicacion">
-        <div class="publicacion-usuario">
-            <img src="$perfil" alt="Perfil" class="publicacion-avatar">
-            <span class="publicacion-username">@{$usuario}</span>
+//<i class="bi bi-arrows-fullscreen"></i>
+        echo <<<HTML
+        <div class="publicacion">
+            <div class="publicacion-usuario">
+                <img src="$perfil" alt="Perfil" class="publicacion-avatar">
+                <span class="publicacion-username">@{$usuario}</span>
+            </div>
+            <img class="publicacion-imagen" src="{$imagen}" alt="Publicación">
+            <button class="btn-ver-imagen" data-src="{$imagen}">Ver imagen</button>
+            <p class="publicacion-descripcion">{$descripcion}</p>
         </div>
-        <img class="publicacion-imagen" src="{$imagen}" alt="Publicación">
-        <button class="btn-ver-imagen" data-src="{$imagen}">Ver imagen</button>
-        <p class="publicacion-descripcion">{$descripcion}</p>
-    </div>
-    HTML;
+        HTML;
 }

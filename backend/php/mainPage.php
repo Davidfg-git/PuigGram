@@ -194,6 +194,31 @@ $sugerencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
         document.getElementById('imagen-expandida').src = '';
     }
 });
+document.addEventListener("DOMContentLoaded", () => {
+    function actualizarBotonesVerImagen() {
+        const botonesVerImagen = document.querySelectorAll(".btn-ver-imagen");
+        botonesVerImagen.forEach(btn => {
+            // Solo actualizar si no lo hemos hecho ya
+            if (!btn.classList.contains('icono-cargado')) {
+                btn.innerHTML = '<i class="bi bi-arrows-fullscreen"></i>';
+                btn.classList.add('icono-cargado'); // Marcar como hecho para no repetir
+            }
+        });
+    }
+
+    // Al cargar la página
+    actualizarBotonesVerImagen();
+
+    // También después de cargar una publicación nueva
+    const observer = new MutationObserver(() => {
+        actualizarBotonesVerImagen();
+    });
+
+    observer.observe(document.querySelector('.post-view'), {
+        childList: true,
+        subtree: true
+    });
+});
 
     </script>
 </body>
