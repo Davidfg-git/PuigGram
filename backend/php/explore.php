@@ -147,19 +147,23 @@ margin-left: 120px;
 
 margin-top: 100px;
 }
+  /* Estilos para el primer hijo */
 
 .contenedor-imagenes :nth-child(1) {
-  /* Estilos para el primer hijo */
 margin-top: 35%;
   margin-left: -40%;
 }
 #seguidos {
-    
+    font-size: 20px;
+    font-family: "Montserrat", Arial, Helvetica, sans-serif;
 margin-left: 20%;
 }
 #seguidores{
+font-size: 20px;
+    font-family: "Montserrat", Arial, Helvetica, sans-serif;
 margin-left: 20%;
 }
+/*seguidores y seguidos*/
 .dores{
 margin-left: 17%;
     color: black;

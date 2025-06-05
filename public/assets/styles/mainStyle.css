@@ -1000,7 +1000,10 @@ pointer-events: none;
     position: relative;
     z-index: 1000;
 }
+.descripcionPerfilPropio{
+position: absolute;
 
+}
 /*
 .img-0, .img-1, .img-2{
     

@@ -298,6 +298,8 @@ $descripcionesPublicaciones = $stmtDescripciones->fetchAll(PDO::FETCH_COLUMN);
                     <p class="nSeguidores"><?php echo $nseguidores ?> seguidores</p>
                     <p class="nSeguidos"><?php echo $nseguidos ?> seguidos</p>
                     <p class="nPublicaciones"><?php echo $npublicaciones ?> Publicaciones</p>
+                    <p class="descripcionPerfilPropio"><?php echo $descripcion ?> </p>
+
                 </div>
 
                 <div class="galeriaImagenes">
