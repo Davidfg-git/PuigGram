@@ -103,6 +103,10 @@ $descripcionesPublicaciones = $stmtDescripciones->fetchAll(PDO::FETCH_COLUMN);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
     <style>
+
+        
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
         #contenedor-imagenes-modal {
     display: grid;
     gap: 8px; /* Espacio entre imágenes, ajústalo a tu gusto */
@@ -128,24 +132,27 @@ width: 220px;
  margin-left: -9%;
 
 }
-
-.nombreUsuarioPopUp{
-    color: black;
-font-size: 30px;
-margin-left: 120px;
-}
-
 .nombreCompletoPopUp{
 
 
 display: none;
 }
+.nombreUsuarioPopUp{
+    position: absolute;
+    color: black;
+font-size: 40px;
+margin-left: 130px;
+}
+
+
 
 .descripcionPopUp{
 
-margin-left: 120px;
+margin-left: 134px;
 
-margin-top: 100px;
+margin-top: 130px;
+
+font-size: 20px;
 }
   /* Estilos para el primer hijo */
 
@@ -154,28 +161,49 @@ margin-top: 35%;
   margin-left: -40%;
 }
 #seguidos {
-    font-size: 20px;
+    padding-top: 0;
+    position: absolute;
+    margin-top: 0% ;
+    font-size: 25px;
     font-family: "Montserrat", Arial, Helvetica, sans-serif;
-margin-left: 20%;
+margin-left: 11%;
 }
 #seguidores{
-font-size: 20px;
+    padding-top: 0;
+    position: absolute;
+    margin-top: 0% ;
+margin-left: 22%;
+font-size: 25px;
     font-family: "Montserrat", Arial, Helvetica, sans-serif;
-margin-left: 20%;
+
 }
 /*seguidores y seguidos*/
 .dores{
-margin-left: 17%;
+    padding-top: 0;
+        position: absolute;
+margin-top: 2% ;
+margin-left: 22%;
     color: black;
-font-size: 20px;
+font-size: 25px;
+    font-family: "Montserrat", Arial, Helvetica, sans-serif;
+
 }
 
 .idos{ 
+    padding-top: 0;
+    margin-top: 2% ;
     position: absolute;
-    font-size: 20px;
-margin-left: 20%;
+    font-size: 25px;
+margin-left: 11%;
+    font-family: "Montserrat", Arial, Helvetica, sans-serif;
+
     color: black;
 
+}
+#btn-seguir-modal {
+    transform: scale(1.5);
+    display: block;
+    margin: 20px auto;
 }
     </style>
 </head>
@@ -429,11 +457,13 @@ document.addEventListener("DOMContentLoaded", () => {
             <p class="nombreUsuarioPopUp"></p>
             <p class="nombreCompletoPopUp"></p>
             <p class="descripcionPopUp"></p> 
-            <p class="dores">Seguidores:
+            <p class="dores">seguidores
             </p>
             <p> <span id="seguidores"></span></p>
-            <p class="idos">Seguidos:</p>
+            <p class="idos">seguidos</p>
             <p> <span id="seguidos"></span></p>
+            <button id="btn-seguir-modal" class="follow-btn" style="transform: scale(1.5); margin-top: 20px;" data-id="">Seguir</button>
+
             <button id="btn-cargar-menos" class="btn-cargar-menos" style="display:none;">⮜</button>
             <div id="contenedor-imagenes-modal"></div>
             <button id="btn-cargar-mas" class="btn-cargar-mas" style="display:none;">⮞</button>

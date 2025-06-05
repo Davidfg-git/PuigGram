@@ -91,7 +91,7 @@ $sugerencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <section class="bordes">
                 <label class="switch">
                     <span class="selectA">Público</span>
-                    <input type="checkbox" id="switchCuenta" <?php if ($tipo == 1)
+                    <input type="checkbox" id="switchCuenta" <?php if ($tipo == 0)
                         echo 'checked'; ?>>
                     <span class="slider"></span>
                     <span class="selectB">Privado</span>
@@ -107,8 +107,9 @@ $sugerencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         href="logout.php">Cerrar Sesión</a></label><br>
 
 
-                <label class="formularioCambio" for=""><a class="enlacesConfiguracion" href="usuariosDAO.php">Eliminar
-                        Cuenta</a></label><br>
+                <label class="formularioCambio" for="">
+                    <a class="enlacesConfiguracion" href="eliminar_cuenta.php" onclick="return confirm('¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.');">Eliminar Cuenta</a>
+                </label><br>
             </section>
         </form>
     </div>

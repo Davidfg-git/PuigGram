@@ -1,46 +1,46 @@
 <?php
-include '../../backend/db/db.php';
-
 session_start();
-$id_usuario_actual = $_SESSION['user_id'] ?? 0; // Obtener ID del usuario actual
+if (!isset($_SESSION['user_id'])) {
+    exit(); // No mostrar nada si no hay sesión
+}
+
+include '../db/db.php';
 
 $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
 $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 1;
+$userId = $_SESSION['user_id']; // <-- esto es lo que agregas
 
-$stmt = $pdo->prepare("
-    SELECT p.*, u.nombre_usuario 
-    FROM publicaciones p 
-    JOIN usuarios u ON p.id_usuario = u.id_usuario 
-    WHERE p.id_usuario != :id_usuario_actual
-    ORDER BY p.id_publicacion DESC 
+$sql = "
+    SELECT p.*, u.nombre_usuario, u.imagen_perfil
+    FROM publicaciones p
+    JOIN usuarios u ON p.id_usuario = u.id_usuario
+    WHERE p.id_usuario != :user_id  -- <-- nueva condición
+    ORDER BY p.fecha_publicacion DESC
     LIMIT :limit OFFSET :offset
-");
+";
 
-$stmt->bindValue(':id_usuario_actual', $id_usuario_actual, PDO::PARAM_INT);
+$stmt = $pdo->prepare($sql);
+$stmt->bindValue(':user_id', $userId, PDO::PARAM_INT); // <-- nuevo parámetro
 $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
 $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-
 $stmt->execute();
-
 $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-if (count($posts) === 0) {
-    // No hay publicación
-    exit;
+foreach ($posts as $post) {
+    $imagen = '../../' . $post['contenido']; // Asegúrate que sea ruta válida
+    $descripcion = nl2br(htmlspecialchars($post['descripcion']));
+    $usuario = htmlspecialchars($post['nombre_usuario']);
+    $perfil = $post['imagen_perfil'] ?: '../../public/assets/default/default-image.jpg';
+
+    echo <<<HTML
+    <div class="publicacion">
+        <div class="publicacion-usuario">
+            <img src="$perfil" alt="Perfil" class="publicacion-avatar">
+            <span class="publicacion-username">@{$usuario}</span>
+        </div>
+        <img class="publicacion-imagen" src="{$imagen}" alt="Publicación">
+        <button class="btn-ver-imagen" data-src="{$imagen}">Ver imagen</button>
+        <p class="publicacion-descripcion">{$descripcion}</p>
+    </div>
+    HTML;
 }
-
-$publicacion = $posts[0];
-$ruta = htmlspecialchars($publicacion['contenido']);
-$descripcion = htmlspecialchars($publicacion['descripcion']);
-$username = htmlspecialchars($publicacion['nombre_usuario']);
-
-echo "
-<div class='post-card'>
-    <div class='media-box'>
-        <img src='../../$ruta' alt='Publicación de @$username' class='post-img'>
-    </div>
-    <div class='description-box'>
-        <p><strong>@$username:</strong> $descripcion</p>
-    </div>
-</div>
-";

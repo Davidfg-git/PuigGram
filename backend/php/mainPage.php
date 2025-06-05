@@ -21,10 +21,10 @@ $imagenPerfil = $user['imagen_perfil'] ?: null;
 
 // Ejemplo de consulta para obtener sugerencias (ajusta según tu lógica y estructura de base de datos)
 $sql = "
-    SELECT u.id_usuario, u.nombre_usuario, u.imagen_perfil, 
+    SELECT u.id_usuario, u.nombre_usuario, u.imagen_perfil,
            CASE WHEN s.id_usuario IS NOT NULL THEN 1 ELSE 0 END AS ya_sigue
     FROM usuarios u
-    LEFT JOIN seguidores s 
+    LEFT JOIN seguidores s
         ON s.id_usuario = :id_sesion AND s.id_seguido = u.id_usuario
     WHERE u.id_usuario != :id_sesion
     LIMIT 5
@@ -45,11 +45,12 @@ $sugerencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="../../public/assets/styles/mainStyle.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet" />
-    <style>
-        /* Estilos para el carrusel de una sola publicación */
-        
-    </style>
 </head>
+<!-- Modal para imagen expandida -->
+<div id="modal-imagen" class="modal-imagen">
+    <span class="cerrar">&times;</span>
+    <img id="imagen-expandida" src="" alt="Imagen expandida">
+</div>
 <body>
     <div class="sidebar">
         <h1>PuigGram</h1>
@@ -73,18 +74,14 @@ $sugerencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <div class="contenido" id="post-container">
-        <div class="post-carousel">
-            <button id="prev-post" class="nav-btn" disabled>&#8249;</button>
-            <div class="post-view">
-                <!-- Carga de publicaciones -->
-            </div>
-            <button id="next-post" class="nav-btn">&#8250;</button>
+    <div class="post-carousel">
+        <button id="prev-post" class="nav-btn" disabled>&#8249;</button>
+        <div class="post-view">
         </div>
+        <button id="next-post" class="nav-btn">&#8250;</button>
     </div>
+</div>
 
-    <div class="ver-mas-container">
-        <button id="ver-mas" class="btn-ver-mas">Ver más</button>
-    </div>
 
     <div class="suggestions">
         <h2>Sugerencias</h2>
@@ -185,7 +182,19 @@ $sugerencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
         // Cargar primera publicación al inicio
         cargarPublicacion(0);
 
-        
+        document.addEventListener('click', function (e) {
+    if (e.target.classList.contains('btn-ver-imagen')) {
+        const imgSrc = e.target.getAttribute('data-src');
+        document.getElementById('imagen-expandida').src = imgSrc;
+        document.getElementById('modal-imagen').style.display = 'flex';
+    }
+
+    if (e.target.classList.contains('cerrar') || e.target.id === 'modal-imagen') {
+        document.getElementById('modal-imagen').style.display = 'none';
+        document.getElementById('imagen-expandida').src = '';
+    }
+});
+
     </script>
 </body>
 </html>
