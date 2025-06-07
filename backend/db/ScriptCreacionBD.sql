@@ -30,8 +30,8 @@ CREATE TABLE IF NOT EXISTS `puiggram`.`usuarios` (
   `fecha_registro` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `descripcion` MEDIUMTEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id_usuario`),
-  UNIQUE INDEX `nombre_usuario` (`nombre_usuario` ASC) VISIBLE,
-  UNIQUE INDEX `correo` (`correo` ASC) VISIBLE)
+  UNIQUE INDEX `nombre_usuario` (`nombre_usuario` ASC) ,
+  UNIQUE INDEX `correo` (`correo` ASC) )
 ENGINE = InnoDB
 AUTO_INCREMENT = 12
 DEFAULT CHARACTER SET = utf8mb4
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `puiggram`.`publicaciones` (
   `descripcion` VARCHAR(100) NULL DEFAULT NULL,
   `fecha_publicacion` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_publicacion`),
-  INDEX `id_usuario` (`id_usuario` ASC) VISIBLE,
+  INDEX `id_usuario` (`id_usuario` ASC) ,
   CONSTRAINT `publicaciones_ibfk_1`
     FOREIGN KEY (`id_usuario`)
     REFERENCES `puiggram`.`usuarios` (`id_usuario`)
@@ -73,8 +73,8 @@ CREATE TABLE IF NOT EXISTS `puiggram`.`megusta` (
   `id_publicacion` INT(11) NOT NULL,
   `fecha_megusta` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_megusta`),
-  UNIQUE INDEX `id_usuario` (`id_usuario` ASC, `id_publicacion` ASC) VISIBLE,
-  INDEX `id_publicacion` (`id_publicacion` ASC) VISIBLE,
+  UNIQUE INDEX `id_usuario` (`id_usuario` ASC, `id_publicacion` ASC) ,
+  INDEX `id_publicacion` (`id_publicacion` ASC) ,
   CONSTRAINT `megusta_ibfk_1`
     FOREIGN KEY (`id_usuario`)
     REFERENCES `puiggram`.`usuarios` (`id_usuario`)
@@ -100,8 +100,8 @@ CREATE TABLE IF NOT EXISTS `puiggram`.`mensajes` (
   `mensaje` MEDIUMTEXT NOT NULL,
   `fecha_envio` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_mensaje`),
-  INDEX `id_emisor` (`id_emisor` ASC) VISIBLE,
-  INDEX `id_receptor` (`id_receptor` ASC) VISIBLE,
+  INDEX `id_emisor` (`id_emisor` ASC) ,
+  INDEX `id_receptor` (`id_receptor` ASC) ,
   CONSTRAINT `mensajes_ibfk_1`
     FOREIGN KEY (`id_emisor`)
     REFERENCES `puiggram`.`usuarios` (`id_usuario`)
@@ -126,8 +126,8 @@ CREATE TABLE IF NOT EXISTS `puiggram`.`seguidores` (
   `id_seguido` INT(11) NOT NULL,
   `fecha_seguimiento` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_seguidor`),
-  UNIQUE INDEX `id_usuario` (`id_usuario` ASC, `id_seguido` ASC) VISIBLE,
-  INDEX `id_seguido` (`id_seguido` ASC) VISIBLE,
+  UNIQUE INDEX `id_usuario` (`id_usuario` ASC, `id_seguido` ASC) ,
+  INDEX `id_seguido` (`id_seguido` ASC) ,
   CONSTRAINT `seguidores_ibfk_1`
     FOREIGN KEY (`id_usuario`)
     REFERENCES `puiggram`.`usuarios` (`id_usuario`)
