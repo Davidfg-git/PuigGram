@@ -25,10 +25,10 @@ $imagenPerfil = $user['imagen_perfil'] ?? null;
 
 // Sugerencias con comprobación de seguimiento optimizada
 $sql = "
-    SELECT u.id_usuario, u.nombre_usuario, u.imagen_perfil, 
+    SELECT u.id_usuario, u.nombre_usuario, u.imagen_perfil,
            CASE WHEN s.id_usuario IS NOT NULL THEN 1 ELSE 0 END AS ya_sigue
     FROM usuarios u
-    LEFT JOIN seguidores s 
+    LEFT JOIN seguidores s
         ON s.id_usuario = :id_sesion AND s.id_seguido = u.id_usuario
     WHERE u.id_usuario != :id_sesion
     LIMIT 5
@@ -43,9 +43,9 @@ $resultadoBusqueda = null;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $busqueda = trim($_POST['barraBusqueda']);
     if (!empty($busqueda)) {
-    $sql = "SELECT id_usuario, nombre_usuario, imagen_perfil, descripcion 
-            FROM usuarios 
-            WHERE nombre_usuario LIKE :busqueda 
+    $sql = "SELECT id_usuario, nombre_usuario, imagen_perfil, descripcion
+            FROM usuarios
+            WHERE nombre_usuario LIKE :busqueda
             LIMIT 6";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['busqueda' => $busqueda . '%']);
@@ -104,15 +104,15 @@ $descripcionesPublicaciones = $stmtDescripciones->fetchAll(PDO::FETCH_COLUMN);
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
     <style>
 
-        
+       
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
         #contenedor-imagenes-modal {
     display: grid;
     gap: 8px; /* Espacio entre imágenes, ajústalo a tu gusto */
     margin-top: 20px;
-    grid-template-columns: repeat(3, 1fr); 
-    
+    grid-template-columns: repeat(3, 1fr);
+   
 }
 .btn-ver-descripcion{
 
@@ -189,7 +189,7 @@ font-size: 25px;
 
 }
 
-.idos{ 
+.idos{
     padding-top: 0;
     margin-top: 2% ;
     position: absolute;
@@ -218,7 +218,7 @@ margin-left: 11%;
     width: 100px;
     height: 40px;
     margin-top: -17px;
-}   
+}  
 
     </style>
 </head>
@@ -252,15 +252,17 @@ margin-left: 11%;
     <?php foreach ($resultadoBusqueda as $resultado): ?>
         <div class="resultado">
             <img src="<?= !empty($resultado['imagen_perfil']) ? $resultado['imagen_perfil'] : '../../public/assets/default/default-image.jpg' ?>" alt="Perfil" width="60" class="imagenes">
-            <span><?= htmlspecialchars($resultado['nombre_usuario']) ?></span>
-            
+            <span class="nombreUsuraio_explore_Resultado"><?= htmlspecialchars($resultado['nombre_usuario']) ?></span>
+           
 <?php
-echo '<button class="verPerfil" type="button" onclick="mostrarModalUsuario(' . $resultado['id_usuario'] . ')">Ver Perfil</button>';
-?><?php endforeach; ?>
+echo '<button class="verPerfilBusqueda" type="button" onclick="mostrarModalUsuario(' . $resultado['id_usuario'] . ')">Ver Perfil</button>';
+?>
+</div>
+<?php endforeach; ?>
 <?php elseif ($_SERVER["REQUEST_METHOD"] == "POST"): ?>
     <p>No se encontró ningún usuario con ese nombre.</p>
 <?php endif; ?>
-</div>
+
 
 <div class="suggestions">
         <h2>Sugerencias</h2>
@@ -552,7 +554,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <img class="imgPerfilPrev2" id="perfilImagen" src="" alt="Profile Picture">
             <p class="nombreUsuarioPopUp"></p>
             <p class="nombreCompletoPopUp"></p>
-            <p class="descripcionPopUp"></p> 
+            <p class="descripcionPopUp"></p>
             <p class="dores">seguidores
             </p>
             <p> <span id="seguidores"></span></p>
@@ -563,12 +565,12 @@ document.addEventListener("DOMContentLoaded", () => {
             <button id="btn-cargar-menos" class="btn-cargar-menos" style="display:none;">⮜</button>
             <div id="contenedor-imagenes-modal"></div>
             <button id="btn-cargar-mas" class="btn-cargar-mas" style="display:none;">⮞</button>
-            
+           
         </div>
     </div>
 </div>
  <script>
-        
+       
         const imagenesPerfil = <?= json_encode($imagenesPerfil) ?>;
         const descripcionesPerfil = <?= json_encode($descripcionesPublicaciones) ?>;
         const contenedorImagenes = document.getElementById('contenedor-imagenes-modal');
@@ -598,7 +600,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
                 // ⬇ Aquí añadimos el botón con el icono
-          
+         
 
 
                 const botonDescripcion = document.createElement('button');

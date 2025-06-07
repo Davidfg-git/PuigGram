@@ -91,7 +91,7 @@ $sugerencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
               <label for="file-upload" class="upload-label">
                 <div class="upload-icon">📤</div>
                 <p class="upload-text">Haz clic o arrastra una imagen</p>
-                <small class="formatos-info">Formatos admitidos: JPG, PNG</small>
+                <small class="formatos-info">Formatos admitidos: JPG, JPEG, PNG, WEBP</small>
                 <input id="file-upload" name="imagen" type="file" accept="image/*" hidden required>
               </label>
 

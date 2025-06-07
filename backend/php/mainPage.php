@@ -144,30 +144,40 @@ $sugerencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
         const nextBtn = document.getElementById('next-post');
 
         function cargarPublicacion(offsetVal) {
-            fetch(`../../backend/php/cargarPublicaciones.php?offset=${offsetVal}&limit=1`)
-                .then(res => res.text())
-                .then(html => {
-                    if(html.trim() === '') {
-                        // No hay más publicaciones
-                        if(offsetVal < offset) {
-                            prevBtn.disabled = true;
-                        } else {
-                            nextBtn.disabled = true;
-                        }
-                        return;
-                    }
-                    // Efecto fade simple
-                    postView.style.opacity = 0;
-                    setTimeout(() => {
-                        postView.innerHTML = html;
-                        postView.style.opacity = 1;
-                    }, 200);
+    fetch(`../../backend/php/cargarPublicaciones.php?offset=${offsetVal}&limit=1`)
+        .then(res => res.text())
+        .then(html => {
+            const hayContenido = html.trim() !== '';
 
-                    offset = offsetVal;
-                    prevBtn.disabled = (offset === 0);
-                    nextBtn.disabled = false;
-                });
-        }
+            if (hayContenido) {
+                // Mostrar el contenido normalmente
+                postView.style.opacity = 0;
+                setTimeout(() => {
+                    postView.innerHTML = html;
+                    postView.style.opacity = 1;
+                }, 200);
+
+                offset = offsetVal;
+
+                // Verifica si hay más publicaciones después de esta
+                fetch(`../../backend/php/cargarPublicaciones.php?offset=${offset + 1}&limit=1`)
+                    .then(r => r.text())
+                    .then(siguiente => {
+                        nextBtn.disabled = (siguiente.trim() === '');
+                    });
+
+                // Si estamos en la primera publicación, desactiva el botón izquierdo
+                prevBtn.disabled = (offset === 0);
+            } else {
+                // No hay contenido en este offset, así que desactiva el botón correspondiente
+                if (offsetVal > offset) {
+                    nextBtn.disabled = true;
+                } else {
+                    prevBtn.disabled = true;
+                }
+            }
+        });
+}
 
         prevBtn.addEventListener('click', () => {
             if(offset > 0) {
