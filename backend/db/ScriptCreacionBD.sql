@@ -20,7 +20,7 @@ USE `puiggram` ;
 DROP TABLE IF EXISTS `puiggram`.`usuarios` ;
 
 CREATE TABLE IF NOT EXISTS `puiggram`.`usuarios` (
-  `id_usuario` INT(11) NOT NULL AUTO_INCREMENT,
+  `id_usuario` INT(11) NOT NULL AUTO_INCREMENT ,
   `nombre_usuario` VARCHAR(50) NOT NULL,
   `nombre_completo` VARCHAR(100) NOT NULL,
   `correo` VARCHAR(100) NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `puiggram`.`usuarios` (
   UNIQUE INDEX `nombre_usuario` (`nombre_usuario` ASC) ,
   UNIQUE INDEX `correo` (`correo` ASC) )
 ENGINE = InnoDB
-AUTO_INCREMENT = 12
+
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `puiggram`.`publicaciones` (
     REFERENCES `puiggram`.`usuarios` (`id_usuario`)
     ON DELETE CASCADE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 19
+
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS `puiggram`.`seguidores` (
     REFERENCES `puiggram`.`usuarios` (`id_usuario`)
     ON DELETE CASCADE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 14
+
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
@@ -163,3 +163,13 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+
+
+
+INSERT INTO `puiggram`.`usuarios` (`nombre_usuario`, `nombre_completo`, `correo`, `contrasena`, `cuenta_publica`, `descripcion`) VALUES ('Pablo_20', 'Pablo Lopez', 'pablo@gmail.com', '1234', '1', 'Descansando.');
+INSERT INTO `puiggram`.`usuarios` (`nombre_usuario`, `nombre_completo`, `correo`, `contrasena`, `cuenta_publica`, `descripcion`) VALUES ('JesusJavier', 'Jesus Díaz', 'diaz@gmail.com', '1234', '1', 'No puedo hablar, solo PuigGram.');
+INSERT INTO `puiggram`.`usuarios` (`nombre_usuario`, `nombre_completo`, `correo`, `contrasena`, `cuenta_publica`, `descripcion`) VALUES ('Marta_DZ', 'Marta Dazario', 'marta@gmail.com', '1234', '1', 'En el gimnasio.');
+INSERT INTO `puiggram`.`usuarios` (`nombre_usuario`, `nombre_completo`, `correo`, `contrasena`, `cuenta_publica`, `descripcion`) VALUES ('_miguel05', 'Miguel Galetano', 'miguel@gmail.com', '1234', '1', 'En el trabajo.');
+INSERT INTO `puiggram`.`usuarios` (`nombre_usuario`, `nombre_completo`, `correo`, `contrasena`, `cuenta_publica`, `descripcion`) VALUES ('Davids', 'Davides Creators', 'david@gmail.com', '1234', '1', 'Los Creadores.');
