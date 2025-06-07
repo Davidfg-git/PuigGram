@@ -46,6 +46,7 @@ $sugerencias = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet" />
 </head>
+
 <!-- Modal para imagen expandida -->
 <div id="modal-imagen" class="modal-imagen">
     <span class="cerrar">&times;</span>

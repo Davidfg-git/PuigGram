@@ -1,4 +1,5 @@
 /* Estilos base (ya existentes) */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 ul li a {
   padding-left: 100px;
 }

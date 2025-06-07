@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <input type="password" name="password" id="password" class="form-control" placeholder="Escribe tu contraseña" required>
                 </div>
                 <div class="d-flex">
-                    <a href="changePassword.php" class="text-decoration-none">¿Has olvidado la contraseña?</a><br><br>
+                    <a href= "" class="text-decoration-none">¿Has olvidado la contraseña?</a><br><br>
                     <a href="register.php" class="text-decoration-none">¿Aún no te has registrado?</a>
                 </div>
                 <button type="submit" class="btn btn-dark w-100">Sign In</button>
